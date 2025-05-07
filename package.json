@@ -4,15 +4,17 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "android": "expo run:android",
+    "prebuild": "expo prebuild --clean --platform android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "expo": "~53.0.7",
+    "expo-build-properties": "~0.14.6",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
-    "react-native": "0.79.2"
+    "react-native": "0.79.2",
+    "overlay-module": "file:modules/overlay-module"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

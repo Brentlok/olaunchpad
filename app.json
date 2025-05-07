@@ -12,18 +12,30 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.brentlok.overlayapp",
+      "intentFilters": [
+        {
+            "action": "android.intent.action.ASSIST",
+            "category": ["android.intent.category.DEFAULT"]
+        }
+      ]
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+            "android": {
+                "activityTheme": "@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar", 
+                "launchMode": "singleTask"
+            }
+        }
+      ]
+    ]
   }
 }

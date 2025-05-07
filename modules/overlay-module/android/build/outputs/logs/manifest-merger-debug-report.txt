@@ -1,0 +1,72 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:1:1-37:12
+INJECTED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:1:1-37:12
+	package
+		INJECTED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:1:11-69
+application
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:2:5-36:19
+activity#expo.modules.overlaymodule.AssistProxyActivity
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:3:9-16:20
+	android:label
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:5:13-46
+	android:excludeFromRecents
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:7:13-46
+	android:noHistory
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:8:13-37
+	android:exported
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:10:13-36
+	android:theme
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:6:13-59
+	android:taskAffinity
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:9:13-36
+	android:name
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:4:13-47
+intent-filter#action:name:android.intent.action.ASSIST+category:name:android.intent.category.DEFAULT
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:12:13-15:29
+action#android.intent.action.ASSIST
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:13:17-71
+	android:name
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:13:25-68
+category#android.intent.category.DEFAULT
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:14:17-76
+	android:name
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:14:27-73
+service#expo.modules.overlaymodule.VoiceInteractionService
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:17:9-29:19
+	android:exported
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:20:13-36
+	android:permission
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:19:13-75
+	android:name
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:18:13-51
+meta-data#android.voice_interaction
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:22:13-25:15
+	android:resource
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:24:17-60
+	android:name
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:23:17-57
+intent-filter#action:name:android.service.voice.VoiceInteractionService
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:26:13-28:29
+action#android.service.voice.VoiceInteractionService
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:27:17-88
+	android:name
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:27:25-85
+service#expo.modules.overlaymodule.VoiceInteractionSessionService
+ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:30:9-35:19
+	android:exported
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:33:13-36
+	android:permission
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:32:13-75
+	android:name
+		ADDED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml:31:13-58
+uses-sdk
+INJECTED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml
+INJECTED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/hubertbieszczad/Work/overlay-app/modules/overlay-module/android/src/main/AndroidManifest.xml
