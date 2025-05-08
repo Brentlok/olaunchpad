@@ -21,8 +21,10 @@
       "package": "com.brentlok.overlayapp",
       "intentFilters": [
         {
-            "action": "android.intent.action.ASSIST",
-            "category": ["android.intent.category.DEFAULT"]
+          "action": "android.intent.action.ASSIST",
+          "category": [
+            "android.intent.category.DEFAULT"
+          ]
         }
       ]
     },
@@ -30,12 +32,17 @@
       [
         "expo-build-properties",
         {
-            "android": {
-                "activityTheme": "@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar", 
-                "launchMode": "singleTask"
-            }
+          "android": {
+            "activityTheme": "@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar",
+            "launchMode": "singleTask"
+          }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f23ceb47-483c-4cff-a453-aad90e29144e"
+      }
+    }
   }
 }

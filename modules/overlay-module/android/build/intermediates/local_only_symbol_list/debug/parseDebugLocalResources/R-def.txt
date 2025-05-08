@@ -1,5 +1,0 @@
-R_DEF: Internal format may change without notice
-local
-id message_text_view
-layout session_overlay_layout
-xml interaction_service

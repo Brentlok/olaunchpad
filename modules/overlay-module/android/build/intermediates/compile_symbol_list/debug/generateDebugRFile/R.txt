@@ -1,3 +1,0 @@
-int id message_text_view 0x0
-int layout session_overlay_layout 0x0
-int xml interaction_service 0x0

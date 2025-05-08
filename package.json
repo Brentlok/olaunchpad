@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo run:android",
     "prebuild": "expo prebuild --clean --platform android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "build": "eas build -p android --local --profile preview"
   },
   "dependencies": {
     "expo": "~53.0.7",
