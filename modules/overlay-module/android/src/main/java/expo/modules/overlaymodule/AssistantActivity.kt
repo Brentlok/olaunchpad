@@ -10,41 +10,102 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import android.content.Context
+import android.content.pm.ResolveInfo
+import androidx.compose.ui.platform.LocalContext
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+
+fun drawableToImageBitmap(drawable: Drawable): ImageBitmap {
+    val bitmap = Bitmap.createBitmap(
+        drawable.intrinsicWidth.takeIf { it > 0 } ?: 1,
+        drawable.intrinsicHeight.takeIf { it > 0 } ?: 1,
+        Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    drawable.setBounds(0, 0, canvas.width, canvas.height)
+    drawable.draw(canvas)
+    return bitmap.asImageBitmap()
+}
+
+fun getInstalledApps(context: Context, query: String): List<ResolveInfo> {
+    val pm = context.packageManager
+    val intent = Intent(Intent.ACTION_MAIN, null)
+    intent.addCategory(Intent.CATEGORY_LAUNCHER)
+    val apps = pm.queryIntentActivities(intent, 0)
+    return apps.filter {
+        val label = it.loadLabel(pm).toString()
+        label.contains(query, ignoreCase = true)
+    }.take(5)
+}
 
 class AssistantActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Lower blur for Android 12+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-            window.attributes.blurBehindRadius = 10 // Lower blur
+            window.attributes.blurBehindRadius = 10
         }
 
         setContent {
+            val context = LocalContext.current
+            var searchText by remember { mutableStateOf(TextFieldValue("")) }
+            val apps = remember(searchText.text) {
+                if (searchText.text.isNotEmpty()) getInstalledApps(context, searchText.text) else emptyList()
+            }
             OverlayWithButtons(
-                onYouTubeClick = { openUrl("https://youtube.com") },
-                onGitHubClick = { openUrl("https://github.com") },
-                onDismiss = { finish() }
+                searchText = searchText,
+                onOpenURL = { url ->
+                    openUrl(url)
+                },
+                onDismiss = { finish() },
+                apps = apps,
+                onAppClick = { appInfo ->
+                    val launchIntent = context.packageManager.getLaunchIntentForPackage(appInfo.activityInfo.packageName)
+                    context.startActivity(launchIntent)
+                    finish()
+                },
+                onSearchTextChange = { searchText = it }
             )
         }
     }
 
     private fun openUrl(url: String) {
+        val pm = packageManager
+        val kiwiPackage = "com.kiwibrowser.browser"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.setPackage("com.kiwibrowser.browser")
+
+        val isKiwiInstalled = try {
+            pm.getPackageInfo(kiwiPackage, 0)
+            true
+        } catch (e: Exception) {
+            false
+        }
+
+        if (isKiwiInstalled) {
+            intent.setPackage(kiwiPackage)
+        }
+
         startActivity(intent)
         finish()
     }
@@ -52,11 +113,21 @@ class AssistantActivity : ComponentActivity() {
 
 @Composable
 fun OverlayWithButtons(
-    onYouTubeClick: () -> Unit,
-    onGitHubClick: () -> Unit,
-    onDismiss: () -> Unit
+    searchText: TextFieldValue,
+    onOpenURL: (String) -> Unit,
+    onDismiss: () -> Unit,
+    apps: List<ResolveInfo>,
+    onAppClick: (ResolveInfo) -> Unit,
+    onSearchTextChange: (TextFieldValue) -> Unit
 ) {
-    // 25% opacity black background
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+        keyboardController?.show()
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -68,39 +139,78 @@ fun OverlayWithButtons(
         color = Color.Transparent
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(24.dp)
-                    // Prevent click events from propagating to the background
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ) { /* Consume click, do nothing */ }
             ) {
-                Button(
-                    onClick = onYouTubeClick,
+                OutlinedTextField(
+                    value = searchText,
+                    onValueChange = onSearchTextChange,
+                    placeholder = { Text("Search...") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
-                ) {
-                    Text("Open YouTube")
-                }
-                Button(
-                    onClick = onGitHubClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                ) {
-                    Text("Open GitHub")
+                        .focusRequester(focusRequester)
+                )
+                val context = LocalContext.current
+                if (searchText.text.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}") }
+                                .padding(8.dp)
+                        ) {
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(text = "Search: ${searchText.text}")
+                        }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}") }
+                                .padding(8.dp)
+                        ) {
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(text = "Search in YouTube: ${searchText.text}")
+                        }
+                        apps.forEach { app ->
+                            val label = app.loadLabel(context.packageManager).toString()
+                            val iconDrawable = app.loadIcon(context.packageManager)
+                            val iconBitmap = remember(app) { drawableToImageBitmap(iconDrawable) }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onAppClick(app) }
+                                    .padding(8.dp)
+                            ) {
+                                Image(
+                                    bitmap = iconBitmap,
+                                    contentDescription = label,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(text = label)
+                            }
+                        }
+                    }
                 }
             }
         }

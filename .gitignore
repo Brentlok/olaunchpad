@@ -35,3 +35,4 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+modules/overlay-module/android/build
