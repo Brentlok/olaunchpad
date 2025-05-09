@@ -49,14 +49,16 @@ fun OverlayWithButtons(
         color = Color.Transparent
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.ime)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .background(
                         color = Color.White,
                         shape = RoundedCornerShape(16.dp)
@@ -80,9 +82,7 @@ fun OverlayWithButtons(
                     Spacer(modifier = Modifier.height(8.dp))
                     val context = LocalContext.current
                     LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 320.dp)
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         item {
                             OverlayRowItem(
