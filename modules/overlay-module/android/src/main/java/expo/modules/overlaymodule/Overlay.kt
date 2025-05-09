@@ -18,9 +18,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import android.content.pm.ResolveInfo
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 
@@ -68,7 +65,7 @@ fun OverlayWithButtons(
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
-                    ) { /* Consume click, do nothing */ }
+                    ) { }
             ) {
                 OutlinedTextField(
                     value = searchText,
@@ -85,51 +82,32 @@ fun OverlayWithButtons(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(max = 320.dp) // Adjust as needed
+                            .heightIn(max = 320.dp)
                     ) {
                         item {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}") }
-                                    .padding(8.dp)
-                            ) {
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(text = "Search: ${searchText.text}")
-                            }
+                            OverlayRowItem(
+                                icon = null,
+                                label = "Search: ${searchText.text}",
+                                onClick = { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}")  }
+                            )
                         }
                         item {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}") }
-                                    .padding(8.dp)
-                            ) {
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(text = "Search in YouTube: ${searchText.text}")
-                            }
+                            OverlayRowItem(
+                                icon = null,
+                                label = "Search in YouTube: ${searchText.text}",
+                                onClick = { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}")  }
+                            )
                         }
                         items(apps) { app ->
                             val label = app.loadLabel(context.packageManager).toString()
                             val iconDrawable = app.loadIcon(context.packageManager)
                             val iconBitmap = remember(app) { drawableToImageBitmap(iconDrawable) }
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { onAppClick(app) }
-                                    .padding(8.dp)
-                            ) {
-                                Image(
-                                    bitmap = iconBitmap,
-                                    contentDescription = label,
-                                    modifier = Modifier.size(32.dp)
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(text = label)
-                            }
+
+                            OverlayRowItem(
+                                icon = iconBitmap,
+                                label = label,
+                                onClick = { onAppClick(app) }
+                            )
                         }
                     }
                 }
