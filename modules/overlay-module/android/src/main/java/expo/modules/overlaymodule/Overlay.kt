@@ -28,7 +28,9 @@ fun OverlayWithButtons(
     onOpenURL: (String) -> Unit,
     onDismiss: () -> Unit,
     apps: List<ResolveInfo>,
+    contacts: List<Contact>,
     onAppClick: (ResolveInfo) -> Unit,
+    onPhoneClick: (phone: String?) -> Unit,
     onSearchTextChange: (TextFieldValue) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -121,6 +123,19 @@ fun OverlayWithButtons(
                                 icon = iconBitmap,
                                 label = label,
                                 onClick = { onAppClick(app) }
+                            )
+                        }
+                        items(contacts) { contact ->
+                            val imageBitmap = remember(contact) {
+                                contact.photoUri?.let { uri ->
+                                    uriToImageBitmap(context, uri)
+                                }
+                            }
+
+                            OverlayRowItem(
+                                icon = imageBitmap,
+                                label = contact.label,
+                                onClick = { onPhoneClick(contact.phoneNumber) }
                             )
                         }
                     }

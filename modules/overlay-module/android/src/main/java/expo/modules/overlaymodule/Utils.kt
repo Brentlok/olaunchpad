@@ -9,6 +9,9 @@ import android.graphics.drawable.Drawable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.ContactsContract
 import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
 
@@ -53,4 +56,77 @@ fun openUrl(context: Context, url: String) {
     }
 
     context.startActivity(intent)
+}
+
+data class Contact(
+    val label: String,
+    val phoneNumber: String?,
+    val photoUri: Uri?
+)
+
+fun getContacts(context: Context, query: String): List<Contact> {
+    val contacts = mutableListOf<Contact>()
+    val contentResolver = context.contentResolver
+
+    val selection = "${ContactsContract.Contacts.DISPLAY_NAME} LIKE ?"
+    val selectionArgs = arrayOf("%$query%")
+
+    val projection = arrayOf(
+        ContactsContract.Contacts._ID,
+        ContactsContract.Contacts.DISPLAY_NAME,
+        ContactsContract.Contacts.PHOTO_URI
+    )
+
+    val cursor = contentResolver.query(
+        ContactsContract.Contacts.CONTENT_URI,
+        projection,
+        selection,
+        selectionArgs,
+        "${ContactsContract.Contacts.DISPLAY_NAME} ASC"
+    )
+
+    cursor?.use {
+        val idIndex = it.getColumnIndex(ContactsContract.Contacts._ID)
+        val nameIndex = it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+        val photoIndex = it.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
+
+        while (it.moveToNext() && contacts.size < 3) {
+            val contactId = it.getString(idIndex)
+            val name = it.getString(nameIndex)
+            val photoUri = it.getString(photoIndex)?.toUri()
+
+            // Fetch phone number
+            var phone: String? = null
+            val phoneCursor = contentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
+                "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
+                arrayOf(contactId),
+                null
+            )
+            phoneCursor?.use { pc ->
+                val phoneIndex =
+                    pc.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                if (phoneIndex != -1 && pc.moveToFirst()) {
+                    phone = pc.getString(phoneIndex)
+                }
+            }
+
+            contacts.add(Contact(name, phone, photoUri))
+        }
+    }
+
+    return contacts
+}
+
+fun uriToImageBitmap(context: Context, uri: Uri): ImageBitmap? {
+    return try {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+        bitmap?.asImageBitmap()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 }

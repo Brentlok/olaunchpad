@@ -1,5 +1,6 @@
 package expo.modules.overlaymodule
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -8,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -34,6 +36,9 @@ class AssistantActivity : ComponentActivity() {
             val apps = remember(searchText.text) {
                 if (searchText.text.isNotEmpty()) getInstalledApps(context, searchText.text) else emptyList()
             }
+            val contacts = remember(searchText.text) {
+                if (searchText.text.isNotEmpty()) getContacts(context, searchText.text) else emptyList()
+            }
             OverlayWithButtons(
                 searchText = searchText,
                 onOpenURL = { url ->
@@ -42,9 +47,20 @@ class AssistantActivity : ComponentActivity() {
                 },
                 onDismiss = { finish() },
                 apps = apps,
+                contacts = contacts,
                 onAppClick = { appInfo ->
                     val launchIntent = context.packageManager.getLaunchIntentForPackage(appInfo.activityInfo.packageName)
                     context.startActivity(launchIntent)
+                    finish()
+                },
+                onPhoneClick = { phone ->
+                    if (phone != null) {
+                        val intent = Intent(Intent.ACTION_DIAL).apply {
+                            data = "tel:$phone".toUri()
+                        }
+                        startActivity(intent)
+                    }
+
                     finish()
                 },
                 onSearchTextChange = { searchText = it }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.draw.clip
 
 @Composable
 fun OverlayRowItem(
@@ -35,7 +37,9 @@ fun OverlayRowItem(
             Image(
                 bitmap = icon,
                 contentDescription = label,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(12.dp))
         }

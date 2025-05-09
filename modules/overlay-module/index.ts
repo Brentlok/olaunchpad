@@ -1,7 +1,9 @@
 import { NativeModule, requireNativeModule } from 'expo'
 
 declare class OverlayModuleType extends NativeModule {
-    hello(): string
+    requestReadContactsPermission(): Promise<boolean>
+    getHasReadContactsPermission(): boolean
+    getIsDefaultAssistant(): boolean
     openAssistantSettings(): void
 }
 
