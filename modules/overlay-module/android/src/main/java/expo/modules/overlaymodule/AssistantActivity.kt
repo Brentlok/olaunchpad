@@ -33,6 +33,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 
 fun drawableToImageBitmap(drawable: Drawable): ImageBitmap {
     val bitmap = Bitmap.createBitmap(
@@ -169,28 +171,37 @@ fun OverlayWithButtons(
                 val context = LocalContext.current
                 if (searchText.text.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}") }
-                                .padding(8.dp)
-                        ) {
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(text = "Search: ${searchText.text}")
+                    val context = LocalContext.current
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 320.dp) // Adjust as needed
+                    ) {
+                        item {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}") }
+                                    .padding(8.dp)
+                            ) {
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(text = "Search: ${searchText.text}")
+                            }
                         }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}") }
-                                .padding(8.dp)
-                        ) {
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(text = "Search in YouTube: ${searchText.text}")
+                        item {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}") }
+                                    .padding(8.dp)
+                            ) {
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(text = "Search in YouTube: ${searchText.text}")
+                            }
                         }
-                        apps.forEach { app ->
+                        items(apps) { app ->
                             val label = app.loadLabel(context.packageManager).toString()
                             val iconDrawable = app.loadIcon(context.packageManager)
                             val iconBitmap = remember(app) { drawableToImageBitmap(iconDrawable) }
