@@ -11,5 +11,12 @@ class OverlayModule : Module() {
         Function("hello") {
             "Hello from Expo OverlayModule"
         }
+
+        Function("openAssistantSettings") {
+            val intent = Intent("android.settings.VOICE_INPUT_SETTINGS")
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val activity = appContext.currentActivity ?: appContext.reactContext
+            activity?.startActivity(intent)
+        }
     }
 }
