@@ -33,7 +33,7 @@ export const App = () => {
         return (
             <View style={styles.container}>
                 <Text style={styles.header}>
-                    Olaunchpad is ready to use.
+                    {'Olaunchpad is ready to use.\nLong press the home button to start.'}
                 </Text>
             </View>
         )

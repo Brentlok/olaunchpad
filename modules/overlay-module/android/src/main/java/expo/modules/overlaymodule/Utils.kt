@@ -1,5 +1,6 @@
 package expo.modules.overlaymodule
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
@@ -65,6 +66,13 @@ data class Contact(
 )
 
 fun getContacts(context: Context, query: String): List<Contact> {
+    val permission = Manifest.permission.READ_CONTACTS
+    val granted = context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+
+    if (!granted) {
+        return emptyList()
+    }
+
     val contacts = mutableListOf<Contact>()
     val contentResolver = context.contentResolver
 
