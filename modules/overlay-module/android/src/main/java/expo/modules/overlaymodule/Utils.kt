@@ -32,7 +32,7 @@ fun getInstalledApps(context: Context, query: String): List<ResolveInfo> {
     return apps.filter {
         val label = it.loadLabel(pm).toString()
         label.contains(query, ignoreCase = true)
-    }.take(5)
+    }.take(3)
 }
 
 fun openUrl(context: Context, url: String) {

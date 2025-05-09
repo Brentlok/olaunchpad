@@ -10,7 +10,7 @@
     <application>
         <activity
             android:name="expo.modules.overlaymodule.AssistantActivity"
-            android:label="Test Assist Proxy"
+            android:label="OLaunchpad"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:excludeFromRecents="true"
             android:noHistory="true"

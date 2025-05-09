@@ -1,14 +1,17 @@
 package expo.modules.overlaymodule
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
+import androidx.compose.ui.res.colorResource
 
 @Composable
 fun OverlayRowItem(
@@ -21,7 +24,12 @@ fun OverlayRowItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(8.dp)
+            .height(56.dp)
+            .background(
+                color = colorResource(id = R.color.primary),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(horizontal = 16.dp)
     ) {
         if (icon != null) {
             Image(
@@ -31,6 +39,9 @@ fun OverlayRowItem(
             )
             Spacer(modifier = Modifier.width(12.dp))
         }
-        Text(text = label)
+        Text(
+            text = label,
+            color = colorResource(id = R.color.white)
+        )
     }
 }

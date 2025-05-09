@@ -8,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,6 +19,8 @@ import android.content.pm.ResolveInfo
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 
 @Composable
 fun OverlayWithButtons(
@@ -60,10 +61,10 @@ fun OverlayWithButtons(
                     .align(Alignment.TopCenter)
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .background(
-                        color = Color.White,
+                        color = colorResource(id = R.color.black),
                         shape = RoundedCornerShape(16.dp)
                     )
-                    .padding(24.dp)
+                    .padding(16.dp)
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
@@ -76,25 +77,38 @@ fun OverlayWithButtons(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
-                        .focusRequester(focusRequester)
+                        .background(
+                            color = colorResource(id = R.color.dark),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .focusRequester(focusRequester),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = colorResource(id = R.color.white),
+                        unfocusedTextColor = colorResource(id = R.color.white),
+                        focusedBorderColor = colorResource(id = R.color.primary),
+                        unfocusedBorderColor = Color.Transparent,
+                        unfocusedPlaceholderColor = colorResource(id = R.color.white_50),
+                        focusedPlaceholderColor = colorResource(id = R.color.white_50),
+                    )
                 )
                 if (searchText.text.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(8.dp))
                     val context = LocalContext.current
                     LazyColumn(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         item {
                             OverlayRowItem(
                                 icon = null,
-                                label = "Search: ${searchText.text}",
+                                label = "Search in browser for '${searchText.text}'",
                                 onClick = { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}")  }
                             )
                         }
                         item {
                             OverlayRowItem(
                                 icon = null,
-                                label = "Search in YouTube: ${searchText.text}",
+                                label = "Search in YouTube for '${searchText.text}'",
                                 onClick = { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}")  }
                             )
                         }

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "overlay-app",
-    "slug": "overlay-app",
+    "name": "Olaunchpad",
+    "slug": "olanuchpad",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,7 +18,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.brentlok.overlayapp",
+      "package": "com.brentlok.olaunchpad",
       "intentFilters": [
         {
           "action": "android.intent.action.ASSIST",
