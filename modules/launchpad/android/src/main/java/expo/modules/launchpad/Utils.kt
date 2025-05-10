@@ -15,6 +15,7 @@ import android.net.Uri
 import android.provider.ContactsContract
 import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
+import com.tencent.mmkv.MMKV
 
 fun drawableToImageBitmap(drawable: Drawable): ImageBitmap {
     val bitmap = createBitmap(
@@ -58,12 +59,6 @@ fun openUrl(context: Context, url: String) {
 
     context.startActivity(intent)
 }
-
-data class Contact(
-    val label: String,
-    val phoneNumber: String?,
-    val photoUri: Uri?
-)
 
 fun getContacts(context: Context, query: String): List<Contact> {
     val permission = Manifest.permission.READ_CONTACTS
@@ -137,4 +132,13 @@ fun uriToImageBitmap(context: Context, uri: Uri): ImageBitmap? {
         e.printStackTrace()
         null
     }
+}
+
+fun getSettings(mmkv: MMKV): Settings {
+   return Settings(
+       isBrowserEnabled = mmkv.decodeString("isBrowserEnabled") == "true",
+       isYoutubeEnabled = mmkv.decodeString("isYoutubeEnabled") == "true",
+       isApplicationsEnabled = mmkv.decodeString("isApplicationsEnabled") == "true",
+       isContactsEnabled = mmkv.decodeString("isContactsEnabled") == "true"
+   )
 }

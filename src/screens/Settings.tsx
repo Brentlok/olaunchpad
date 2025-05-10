@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { CheckPermissions, Setting } from '~/components'
+import { Linking, StyleSheet, Text, View } from 'react-native'
+import { Button, CheckPermissions, Setting } from '~/components'
 import { useTranslations } from '~/locale'
+import { Launchpad } from '~/modules'
 import { colors } from '~/style'
 import { APP_SETTINGS_NAMES } from '~/types'
 
@@ -21,6 +22,9 @@ export const Settings = () => {
                     />
                 ))}
             </View>
+            <Button onPress={() => Launchpad.open()}>
+                {T.screen.settings.openLaunchpad}
+            </Button>
             <CheckPermissions />
         </View>
     )

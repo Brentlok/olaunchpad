@@ -7,7 +7,6 @@ export const en_US = {
             isYoutubeEnabled: 'Search in Youtube',
             isApplicationsEnabled: 'Search in Applications',
             isContactsEnabled: 'Search in Contacts',
-            isPlayStoreEnabled: 'Search in Play Store'
         } satisfies Record<AppSetting, string>,
         checkPermissions: {
             contacts: {
@@ -25,7 +24,8 @@ export const en_US = {
             openSettings: 'Open Default Assistant Settings'
         },
         settings: {
-            title: 'Olaunchpad Settings'
+            title: 'Olaunchpad Settings',
+            openLaunchpad: 'Open Launchpad'
         }
     },
 } as const

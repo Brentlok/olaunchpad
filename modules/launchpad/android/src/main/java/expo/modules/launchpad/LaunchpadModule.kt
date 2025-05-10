@@ -2,6 +2,7 @@ package expo.modules.launchpad
 
 import android.Manifest
 import android.content.ComponentName
+import android.content.Intent
 import android.content.pm.PackageManager
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
@@ -14,6 +15,13 @@ import android.provider.Settings
 class LaunchpadModule : Module() {
     override fun definition() = ModuleDefinition {
         Name("LaunchpadModule")
+
+        Function("open") {
+            val intent = Intent(Intent.ACTION_ASSIST)
+            intent.setPackage("com.brentlok.olaunchpad");
+            val activity = appContext.currentActivity ?: appContext.reactContext
+            activity?.startActivity(intent)
+        }
 
         Function("getHasReadContactsPermission") {
             val context = appContext.reactContext ?: return@Function false
