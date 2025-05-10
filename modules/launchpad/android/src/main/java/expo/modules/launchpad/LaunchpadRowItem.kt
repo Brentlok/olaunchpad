@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 fun LaunchpadRowItem(
     icon: ImageBitmap?,
     label: String,
+    subLabel: String?,
     onClick: () -> Unit
 ) {
     Row(
@@ -47,5 +48,12 @@ fun LaunchpadRowItem(
             text = label,
             color = colorResource(id = R.color.white)
         )
+        if (subLabel != null) {
+            Text(
+                text = subLabel,
+                color = colorResource(id = R.color.white),
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
     }
 }

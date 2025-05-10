@@ -71,49 +71,41 @@ fun getContacts(context: Context, query: String): List<Contact> {
     val contacts = mutableListOf<Contact>()
     val contentResolver = context.contentResolver
 
-    val selection = "${ContactsContract.Contacts.DISPLAY_NAME} LIKE ?"
-    val selectionArgs = arrayOf("%$query%")
+    val selection = "(${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} LIKE ? OR " +
+            "${ContactsContract.CommonDataKinds.Phone.NUMBER} LIKE ?)"
+    val selectionArgs = arrayOf("%$query%", "%$query%")
 
     val projection = arrayOf(
-        ContactsContract.Contacts._ID,
-        ContactsContract.Contacts.DISPLAY_NAME,
-        ContactsContract.Contacts.PHOTO_URI
+        ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+        ContactsContract.CommonDataKinds.Phone.NUMBER,
+        ContactsContract.CommonDataKinds.Phone.PHOTO_URI
     )
 
     val cursor = contentResolver.query(
-        ContactsContract.Contacts.CONTENT_URI,
+        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
         projection,
         selection,
         selectionArgs,
-        "${ContactsContract.Contacts.DISPLAY_NAME} ASC"
+        "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} ASC"
     )
 
+    val seenIds = mutableSetOf<String>()
+
     cursor?.use {
-        val idIndex = it.getColumnIndex(ContactsContract.Contacts._ID)
-        val nameIndex = it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-        val photoIndex = it.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
+        val idIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+        val nameIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+        val phoneIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+        val photoIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI)
 
         while (it.moveToNext() && contacts.size < 3) {
             val contactId = it.getString(idIndex)
-            val name = it.getString(nameIndex)
-            val photoUri = it.getString(photoIndex)?.toUri()
+            if (seenIds.contains(contactId)) continue // Avoid duplicates
+            seenIds.add(contactId)
 
-            // Fetch phone number
-            var phone: String? = null
-            val phoneCursor = contentResolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
-                "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
-                arrayOf(contactId),
-                null
-            )
-            phoneCursor?.use { pc ->
-                val phoneIndex =
-                    pc.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                if (phoneIndex != -1 && pc.moveToFirst()) {
-                    phone = pc.getString(phoneIndex)
-                }
-            }
+            val name = it.getString(nameIndex)
+            val phone = it.getString(phoneIndex)
+            val photoUri = it.getString(photoIndex)?.toUri()
 
             contacts.add(Contact(name, phone, photoUri))
         }

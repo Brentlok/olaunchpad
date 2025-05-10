@@ -33,14 +33,6 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     val packageManager = context.packageManager
     val mmkv = remember { MMKV.mmkvWithID("mmkv.default", MMKV.MULTI_PROCESS_MODE) }
 
-    var searchText by remember { mutableStateOf(TextFieldValue("")) }
-    val apps = remember(searchText.text) {
-        if (searchText.text.isNotEmpty()) getInstalledApps(context, searchText.text) else emptyList()
-    }
-    val contacts = remember(searchText.text) {
-        if (searchText.text.isNotEmpty()) getContacts(context, searchText.text) else emptyList()
-    }
-
     var settings by remember {
         mutableStateOf(
             Settings(
@@ -50,6 +42,14 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                 isContactsEnabled = false
             )
         )
+    }
+
+    var searchText by remember { mutableStateOf(TextFieldValue("")) }
+    val apps = remember(searchText.text) {
+        if (searchText.text.isNotEmpty() && settings.isApplicationsEnabled) getInstalledApps(context, searchText.text) else emptyList()
+    }
+    val contacts = remember(searchText.text) {
+        if (searchText.text.isNotEmpty() && settings.isContactsEnabled) getContacts(context, searchText.text) else emptyList()
     }
 
     fun onOpenURL(url: String) {
@@ -143,6 +143,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                                 LaunchpadRowItem(
                                     icon = null,
                                     label = "Search in browser for '${searchText.text}'",
+                                    subLabel = null,
                                     onClick = { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}")  }
                                 )
                             }
@@ -152,6 +153,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                                 LaunchpadRowItem(
                                     icon = null,
                                     label = "Search in YouTube for '${searchText.text}'",
+                                    subLabel = null,
                                     onClick = { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}")  }
                                 )
                             }
@@ -165,7 +167,8 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                                 LaunchpadRowItem(
                                     icon = iconBitmap,
                                     label = label,
-                                    onClick = { onAppClick(app) }
+                                    onClick = { onAppClick(app) },
+                                    subLabel = null
                                 )
                             }
                         }
@@ -180,7 +183,8 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                                 LaunchpadRowItem(
                                     icon = imageBitmap,
                                     label = contact.label,
-                                    onClick = { onPhoneClick(contact.phoneNumber) }
+                                    onClick = { onPhoneClick(contact.phoneNumber) },
+                                    subLabel = contact.phoneNumber
                                 )
                             }
                         }
