@@ -34,14 +34,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     val mmkv = remember { MMKV.mmkvWithID("mmkv.default", MMKV.MULTI_PROCESS_MODE) }
 
     var settings by remember {
-        mutableStateOf(
-            Settings(
-                isBrowserEnabled = false,
-                isYoutubeEnabled = false,
-                isApplicationsEnabled = false,
-                isContactsEnabled = false
-            )
-        )
+        mutableStateOf(getSettings(mmkv))
     }
 
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
@@ -69,6 +62,26 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                 data = "tel:$phone".toUri()
             }
             context.startActivity(intent)
+        }
+
+        closeLaunchpad()
+    }
+
+    fun onPlayStoreSearch() {
+        val query = Uri.encode(searchText.text)
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = "market://search?q=$query".toUri()
+            setPackage("com.android.vending")
+        }
+        val playStoreAvailable = intent.resolveActivity(context.packageManager) != null
+
+        if (playStoreAvailable) {
+            context.startActivity(intent)
+        } else {
+            val webIntent = Intent(Intent.ACTION_VIEW).apply {
+                data = "https://play.google.com/store/search?q=$query".toUri()
+            }
+            context.startActivity(webIntent)
         }
 
         closeLaunchpad()
@@ -155,6 +168,16 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                                     label = "Search in YouTube for '${searchText.text}'",
                                     subLabel = null,
                                     onClick = { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}")  }
+                                )
+                            }
+                        }
+                        if (settings.isPlayStoreEnabled && apps.size == 0) {
+                            item {
+                                LaunchpadRowItem(
+                                    icon = null,
+                                    label = "Search in Play Store for '${searchText.text}'",
+                                    onClick = { onPlayStoreSearch() },
+                                    subLabel = null
                                 )
                             }
                         }

@@ -131,6 +131,7 @@ fun getSettings(mmkv: MMKV): Settings {
        isBrowserEnabled = mmkv.decodeString("isBrowserEnabled") == "true",
        isYoutubeEnabled = mmkv.decodeString("isYoutubeEnabled") == "true",
        isApplicationsEnabled = mmkv.decodeString("isApplicationsEnabled") == "true",
-       isContactsEnabled = mmkv.decodeString("isContactsEnabled") == "true"
+       isContactsEnabled = mmkv.decodeString("isContactsEnabled") == "true",
+       isPlayStoreEnabled = mmkv.decodeString("isPlayStoreEnabled") == "true"
    )
 }
