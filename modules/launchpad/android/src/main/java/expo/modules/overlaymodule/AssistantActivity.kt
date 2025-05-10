@@ -1,4 +1,4 @@
-package expo.modules.overlaymodule
+package expo.modules.launchpad
 
 import android.content.Intent
 import android.os.Build
@@ -39,7 +39,7 @@ class AssistantActivity : ComponentActivity() {
             val contacts = remember(searchText.text) {
                 if (searchText.text.isNotEmpty()) getContacts(context, searchText.text) else emptyList()
             }
-            OverlayWithButtons(
+            Launchpad(
                 searchText = searchText,
                 onOpenURL = { url ->
                     openUrl(context, url)

@@ -1,4 +1,4 @@
-package expo.modules.overlaymodule
+package expo.modules.launchpad
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,7 +16,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.draw.clip
 
 @Composable
-fun OverlayRowItem(
+fun LaunchpadRowItem(
     icon: ImageBitmap?,
     label: String,
     onClick: () -> Unit

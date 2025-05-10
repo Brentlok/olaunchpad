@@ -8,7 +8,7 @@
     </queries>
     <application>
         <activity
-            android:name="expo.modules.overlaymodule.AssistantActivity"
+            android:name="expo.modules.launchpad.AssistantActivity"
             android:label="OLaunchpad"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:excludeFromRecents="true"

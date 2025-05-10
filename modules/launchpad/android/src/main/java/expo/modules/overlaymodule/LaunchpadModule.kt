@@ -1,4 +1,4 @@
-package expo.modules.overlaymodule
+package expo.modules.launchpad
 
 import android.Manifest
 import android.content.ComponentName
@@ -11,9 +11,9 @@ import expo.modules.interfaces.permissions.PermissionsResponseListener
 import expo.modules.interfaces.permissions.PermissionsStatus
 import android.provider.Settings
 
-class OverlayModule : Module() {
+class LaunchpadModule : Module() {
     override fun definition() = ModuleDefinition {
-        Name("OverlayModule")
+        Name("LaunchpadModule")
 
         Function("getHasReadContactsPermission") {
             val context = appContext.reactContext ?: return@Function false

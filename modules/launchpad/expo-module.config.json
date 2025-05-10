@@ -1,0 +1,9 @@
+{
+  "platforms": ["android"],
+  "apple": {
+    "modules": ["LaunchpadModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.launchpad.LaunchpadModule"] 
+  }
+}

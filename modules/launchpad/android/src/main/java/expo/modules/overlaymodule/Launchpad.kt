@@ -1,4 +1,4 @@
-package expo.modules.overlaymodule
+package expo.modules.launchpad
 
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 
 @Composable
-fun OverlayWithButtons(
+fun Launchpad(
     searchText: TextFieldValue,
     onOpenURL: (String) -> Unit,
     onDismiss: () -> Unit,
@@ -101,14 +101,14 @@ fun OverlayWithButtons(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         item {
-                            OverlayRowItem(
+                            LaunchpadRowItem(
                                 icon = null,
                                 label = "Search in browser for '${searchText.text}'",
                                 onClick = { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}")  }
                             )
                         }
                         item {
-                            OverlayRowItem(
+                            LaunchpadRowItem(
                                 icon = null,
                                 label = "Search in YouTube for '${searchText.text}'",
                                 onClick = { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}")  }
@@ -119,7 +119,7 @@ fun OverlayWithButtons(
                             val iconDrawable = app.loadIcon(context.packageManager)
                             val iconBitmap = remember(app) { drawableToImageBitmap(iconDrawable) }
 
-                            OverlayRowItem(
+                            LaunchpadRowItem(
                                 icon = iconBitmap,
                                 label = label,
                                 onClick = { onAppClick(app) }
@@ -132,7 +132,7 @@ fun OverlayWithButtons(
                                 }
                             }
 
-                            OverlayRowItem(
+                            LaunchpadRowItem(
                                 icon = imageBitmap,
                                 label = contact.label,
                                 onClick = { onPhoneClick(contact.phoneNumber) }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { OverlayModule } from 'overlay-module'
+import { Launchpad } from '~/modules'
 import { StyleSheet, Text, Linking } from 'react-native'
 import { useStore } from '~/store'
 import { useTranslations } from '~/locale'
@@ -17,7 +17,7 @@ export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ 
     const handlePermissionRequest = () => {
         const start = Date.now()
 
-        OverlayModule.requestReadContactsPermission()
+        Launchpad.requestReadContactsPermission()
             .then(() => setHasContactsPermission(true))
             .catch(() => {
                 if (Date.now() - start < 500) {

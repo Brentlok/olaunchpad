@@ -35,5 +35,7 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
-modules/overlay-module/android/build
+modules/launchpad/android/build
 android
+
+!modules/launchpad/android

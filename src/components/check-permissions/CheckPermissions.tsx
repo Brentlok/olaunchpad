@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { APP_SETTINGS_NAMES } from '~/types'
 import { CheckContactPermission } from './CheckContactPermission'
 import { useStore } from '~/store'
-import { OverlayModule } from 'overlay-module'
+import { Launchpad } from '~/modules'
 import { useWillBeActive } from '~/hooks'
 
 export const CheckPermissions: React.FC = () => {
     const { isContactsEnabled } = useStore()
     const { willBeActive } = useWillBeActive()
-    const [hasContactsPermission, setHasContactsPermission] = useState(() => OverlayModule.getHasReadContactsPermission())
+    const [hasContactsPermission, setHasContactsPermission] = useState(() => Launchpad.getHasReadContactsPermission())
 
     const withoutGrantedPermissions = APP_SETTINGS_NAMES.filter(setting => {
         switch (setting) {
@@ -24,7 +24,7 @@ export const CheckPermissions: React.FC = () => {
             return
         }
 
-        setHasContactsPermission(OverlayModule.getHasReadContactsPermission())
+        setHasContactsPermission(Launchpad.getHasReadContactsPermission())
     }, [willBeActive])
 
     return (

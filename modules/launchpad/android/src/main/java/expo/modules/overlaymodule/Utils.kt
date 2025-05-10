@@ -1,4 +1,4 @@
-package expo.modules.overlaymodule
+package expo.modules.launchpad
 
 import android.Manifest
 import android.content.Context

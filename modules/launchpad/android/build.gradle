@@ -4,7 +4,7 @@ plugins {
   id 'org.jetbrains.kotlin.plugin.compose' version '2.0.21'
 }
 
-group = 'expo.modules.overlaymodule'
+group = 'expo.modules.launchpad'
 version = '0.7.2'
 
 def expoModulesCorePlugin = new File(project(":expo-modules-core").projectDir.absolutePath, "ExpoModulesCorePlugin.gradle")
@@ -36,7 +36,7 @@ if (useManagedAndroidSdkVersions) {
 }
 
 android {
-  namespace "expo.modules.overlaymodule"
+  namespace "expo.modules.launchpad"
   defaultConfig {
     versionCode 1
     versionName "0.7.2"

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { OverlayModule } from 'overlay-module'
+import { Launchpad } from '~/modules'
 import { useWillBeActive } from '~/hooks'
 import { Initial, Settings } from './screens'
 
 export const App = () => {
-    const [isDefaultAssistant, setIsDefaultAssistant] = useState(() => OverlayModule.getIsDefaultAssistant())
+    const [isDefaultAssistant, setIsDefaultAssistant] = useState(() => Launchpad.getIsDefaultAssistant())
     const { willBeActive } = useWillBeActive()
 
     useEffect(() => {
@@ -12,7 +12,7 @@ export const App = () => {
             return
         }
 
-        setIsDefaultAssistant(OverlayModule.getIsDefaultAssistant())
+        setIsDefaultAssistant(Launchpad.getIsDefaultAssistant())
     }, [willBeActive])
 
     return isDefaultAssistant ? <Settings /> : <Initial />

@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo run:android",
     "prebuild": "expo prebuild --clean --platform android",
-    "build": "eas build -p android --local --profile preview"
+    "build": "eas build -p android --local --profile preview",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "expo": "53.0.9",
@@ -14,7 +15,6 @@
     "expo-status-bar": "2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.2",
-    "overlay-module": "file:modules/overlay-module",
     "stan-js": "1.7.0",
     "react-native-mmkv": "3.2.0"
   },
