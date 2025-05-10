@@ -1,6 +1,6 @@
 import React from 'react'
-import { Pressable, StyleSheet, Text } from 'react-native'
-import { colors } from '../colors'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { colors } from '~/style'
 
 type ButtonProps = {
     children: string,
@@ -25,9 +25,11 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
     button: {
-        flex: 1,
+        flexGrow: 1,
         height: 56,
+        minHeight: 56,
         maxHeight: 56,
+        width: '100%',
         backgroundColor: colors.primary,
         justifyContent: 'center',
         alignItems: 'center',

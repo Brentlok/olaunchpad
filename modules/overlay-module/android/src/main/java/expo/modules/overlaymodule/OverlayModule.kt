@@ -2,7 +2,6 @@ package expo.modules.overlaymodule
 
 import android.Manifest
 import android.content.ComponentName
-import android.content.Intent
 import android.content.pm.PackageManager
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
@@ -15,13 +14,6 @@ import android.provider.Settings
 class OverlayModule : Module() {
     override fun definition() = ModuleDefinition {
         Name("OverlayModule")
-
-        Function("openAssistantSettings") {
-            val intent = Intent("android.settings.VOICE_INPUT_SETTINGS")
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            val activity = appContext.currentActivity ?: appContext.reactContext
-            activity?.startActivity(intent)
-        }
 
         Function("getHasReadContactsPermission") {
             val context = appContext.reactContext ?: return@Function false

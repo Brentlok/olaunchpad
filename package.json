@@ -6,21 +6,22 @@
     "start": "expo start",
     "android": "expo run:android",
     "prebuild": "expo prebuild --clean --platform android",
-    "ios": "expo run:ios",
     "build": "eas build -p android --local --profile preview"
   },
   "dependencies": {
-    "expo": "~53.0.7",
-    "expo-build-properties": "~0.14.6",
-    "expo-status-bar": "~2.2.3",
+    "expo": "53.0.9",
+    "expo-build-properties": "0.14.6",
+    "expo-status-bar": "2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.2",
-    "overlay-module": "file:modules/overlay-module"
+    "overlay-module": "file:modules/overlay-module",
+    "stan-js": "1.7.0",
+    "react-native-mmkv": "3.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@types/react": "~19.0.10",
-    "typescript": "~5.8.3"
+    "@babel/core": "7.27.1",
+    "@types/react": "19.1.3",
+    "typescript": "5.8.3"
   },
   "private": true
 }

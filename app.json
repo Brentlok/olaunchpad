@@ -5,17 +5,17 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#111111"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#111111"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.brentlok.olaunchpad",
@@ -33,7 +33,7 @@
         "expo-build-properties",
         {
           "android": {
-            "activityTheme": "@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar",
+            "activityTheme": "@android:style/Theme.DeviceDefault.Dark.Dialog.NoActionBar",
             "launchMode": "singleTask"
           }
         }
