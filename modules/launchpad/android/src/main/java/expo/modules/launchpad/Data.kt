@@ -13,4 +13,5 @@ data class Settings(
     val isApplicationsEnabled: Boolean,
     val isContactsEnabled: Boolean,
     val isPlayStoreEnabled: Boolean,
+    val isCalculatorEnabled: Boolean,
 )

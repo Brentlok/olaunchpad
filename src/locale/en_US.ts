@@ -7,7 +7,8 @@ export const en_US = {
             isYoutubeEnabled: 'Search in Youtube',
             isApplicationsEnabled: 'Search in Applications',
             isContactsEnabled: 'Search in Contacts',
-            isPlayStoreEnabled: 'Search in Play Store'
+            isPlayStoreEnabled: 'Search in Play Store',
+            isCalculatorEnabled: 'Calculator'
         } satisfies Record<AppSetting, string>,
         checkPermissions: {
             contacts: {

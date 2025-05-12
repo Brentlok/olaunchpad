@@ -1,5 +1,8 @@
 package expo.modules.launchpad
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.net.Uri
@@ -32,6 +35,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     val context = LocalContext.current
     val packageManager = context.packageManager
     val mmkv = remember { MMKV.mmkvWithID("mmkv.default", MMKV.MULTI_PROCESS_MODE) }
+    val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     var settings by remember {
         mutableStateOf(getSettings(mmkv))
@@ -43,6 +47,9 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     }
     val contacts = remember(searchText.text) {
         if (searchText.text.isNotEmpty() && settings.isContactsEnabled) getContacts(context, searchText.text) else emptyList()
+    }
+    val calculation = remember(searchText.text) {
+        if (searchText.text.isNotEmpty() && settings.isCalculatorEnabled) evaluateExpression(searchText.text) else null
     }
 
     fun onOpenURL(url: String) {
@@ -84,6 +91,11 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
             context.startActivity(webIntent)
         }
 
+        closeLaunchpad()
+    }
+
+    fun copyToClipboard(label: String, text: String) {
+        clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text))
         closeLaunchpad()
     }
 
@@ -151,6 +163,22 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        if (settings.isCalculatorEnabled && calculation != null) {
+                            val calculationResult = if (calculation % 1.0 == 0.0) {
+                                calculation.toInt().toString()
+                            } else {
+                                calculation.toString()
+                            }
+
+                            item {
+                                LaunchpadRowItem(
+                                    icon = null,
+                                    label = calculationResult,
+                                    subLabel = "(Copy to clipboard)",
+                                    onClick = { copyToClipboard("Calculation", calculationResult)  }
+                                )
+                            }
+                        }
                         if (settings.isBrowserEnabled) {
                             item {
                                 LaunchpadRowItem(

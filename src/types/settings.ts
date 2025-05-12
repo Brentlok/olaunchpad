@@ -5,7 +5,8 @@ export const DEFAULT_APP_SETTINGS = {
     isYoutubeEnabled: true,
     isApplicationsEnabled: true,
     isContactsEnabled: false,
-    isPlayStoreEnabled: true
+    isPlayStoreEnabled: true,
+    isCalculatorEnabled: true,
 }
 
 export const APP_SETTINGS_NAMES = Object.keys(DEFAULT_APP_SETTINGS) as Array<AppSetting>
