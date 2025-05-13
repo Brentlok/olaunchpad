@@ -1,10 +1,10 @@
 package expo.modules.launchpad
-import android.net.Uri
+import androidx.compose.ui.graphics.ImageBitmap
 
 data class Contact(
     val label: String,
     val phoneNumber: String?,
-    val photoUri: Uri?
+    val icon: ImageBitmap?
 )
 
 data class Settings(
@@ -14,4 +14,10 @@ data class Settings(
     val isContactsEnabled: Boolean,
     val isPlayStoreEnabled: Boolean,
     val isCalculatorEnabled: Boolean,
+)
+
+data class InstalledApp(
+    val label: String,
+    val icon: ImageBitmap,
+    val packageName: String,
 )

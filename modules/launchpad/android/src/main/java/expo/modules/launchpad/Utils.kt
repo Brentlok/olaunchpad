@@ -3,13 +3,13 @@ package expo.modules.launchpad
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.ContactsContract
@@ -30,15 +30,19 @@ fun drawableToImageBitmap(drawable: Drawable): ImageBitmap {
     return bitmap.asImageBitmap()
 }
 
-fun getInstalledApps(context: Context, query: String): List<ResolveInfo> {
+fun getInstalledApps(context: Context): List<InstalledApp> {
     val pm = context.packageManager
     val intent = Intent(Intent.ACTION_MAIN, null)
     intent.addCategory(Intent.CATEGORY_LAUNCHER)
     val apps = pm.queryIntentActivities(intent, 0)
-    return apps.filter {
-        val label = it.loadLabel(pm).toString()
-        label.contains(query, ignoreCase = true)
-    }.take(3)
+
+    return apps.map {
+        InstalledApp(
+            label = it.loadLabel(context.packageManager).toString(),
+            icon = drawableToImageBitmap(it.loadIcon(context.packageManager)),
+            packageName = it.activityInfo.packageName
+        )
+    }
 }
 
 fun openUrl(context: Context, url: String) {
@@ -61,7 +65,7 @@ fun openUrl(context: Context, url: String) {
     context.startActivity(intent)
 }
 
-fun getContacts(context: Context, query: String): List<Contact> {
+fun getContacts(context: Context): List<Contact> {
     val permission = Manifest.permission.READ_CONTACTS
     val granted = context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
@@ -69,53 +73,46 @@ fun getContacts(context: Context, query: String): List<Contact> {
         return emptyList()
     }
 
-    val contacts = mutableListOf<Contact>()
-    val contentResolver = context.contentResolver
+    val contactsList = mutableListOf<Contact>()
 
-    val selection = "(${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} LIKE ? OR " +
-            "${ContactsContract.CommonDataKinds.Phone.NUMBER} LIKE ?)"
-    val selectionArgs = arrayOf("%$query%", "%$query%")
-
+    // Define the columns to retrieve
     val projection = arrayOf(
-        ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
         ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
         ContactsContract.CommonDataKinds.Phone.NUMBER,
         ContactsContract.CommonDataKinds.Phone.PHOTO_URI
     )
 
-    val cursor = contentResolver.query(
+    // Query the contacts database
+    val cursor: Cursor? = context.contentResolver.query(
         ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
         projection,
-        selection,
-        selectionArgs,
-        "${ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} ASC"
+        null,
+        null,
+        null
     )
 
-    val seenIds = mutableSetOf<String>()
-
+    // Process the cursor
     cursor?.use {
-        val idIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
         val nameIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-        val phoneIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+        val numberIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
         val photoIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI)
-
-        while (it.moveToNext() && contacts.size < 3) {
-            val contactId = it.getString(idIndex)
-            if (seenIds.contains(contactId)) continue // Avoid duplicates
-            seenIds.add(contactId)
-
+        while (it.moveToNext()) {
             val name = it.getString(nameIndex)
-            val phone = it.getString(phoneIndex)
+            val phoneNumber = it.getString(numberIndex)
             val photoUri = it.getString(photoIndex)?.toUri()
 
-            contacts.add(Contact(name, phone, photoUri))
+            contactsList.add(Contact(name, phoneNumber, uriToImageBitmap(context, photoUri)))
         }
     }
 
-    return contacts
+    return contactsList
 }
 
-fun uriToImageBitmap(context: Context, uri: Uri): ImageBitmap? {
+fun uriToImageBitmap(context: Context, uri: Uri?): ImageBitmap? {
+    if (uri == null) {
+        return null
+    }
+
     return try {
         val inputStream = context.contentResolver.openInputStream(uri)
         val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -244,4 +241,21 @@ fun evaluateExpression(expression: String): Double? {
     // Convert the expression to postfix and evaluate it
     val postfix = infixToPostfix(expression)
     return evaluatePostfix(postfix)
+}
+
+fun <T> filterAndTake(
+    list: List<T>,
+    callback: (T) -> Boolean,
+    count: Int
+): List<T> {
+    val result = mutableListOf<T>()
+    for (item in list) {
+        if (callback(item)) {
+            result.add(item)
+            if (result.size == count) {
+                break
+            }
+        }
+    }
+    return result
 }

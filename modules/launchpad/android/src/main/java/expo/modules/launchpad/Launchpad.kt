@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ResolveInfo
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +25,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.net.toUri
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import com.tencent.mmkv.MMKV
 
 @Composable
@@ -42,11 +43,25 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     }
 
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
-    val apps = remember(searchText.text) {
-        if (searchText.text.isNotEmpty() && settings.isApplicationsEnabled) getInstalledApps(context, searchText.text) else emptyList()
+    val apps = remember {
+        if (settings.isApplicationsEnabled) { getInstalledApps(context) } else emptyList()
     }
-    val contacts = remember(searchText.text) {
-        if (searchText.text.isNotEmpty() && settings.isContactsEnabled) getContacts(context, searchText.text) else emptyList()
+    val contacts = remember {
+        if (settings.isContactsEnabled) getContacts(context) else emptyList()
+    }
+    val filteredApps = remember(searchText.text) {
+        filterAndTake(
+            list = apps,
+            callback =  { it.label.contains(searchText.text, ignoreCase = true) },
+            count = 3
+        )
+    }
+    val filteredContacts = remember(searchText.text) {
+        filterAndTake(
+            list = contacts,
+            callback =  { it.label.contains(searchText.text, ignoreCase = true) || it.phoneNumber.toString().contains(searchText.text, ignoreCase = true) },
+            count = 3
+        )
     }
     val calculation = remember(searchText.text) {
         if (searchText.text.isNotEmpty() && settings.isCalculatorEnabled) evaluateExpression(searchText.text) else null
@@ -57,8 +72,8 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
         closeLaunchpad()
     }
 
-    fun onAppClick(appInfo: ResolveInfo) {
-        val launchIntent = packageManager.getLaunchIntentForPackage(appInfo.activityInfo.packageName)
+    fun onAppClick(installedApp: InstalledApp) {
+        val launchIntent = packageManager.getLaunchIntentForPackage(installedApp.packageName)
         context.startActivity(launchIntent)
         closeLaunchpad()
     }
@@ -136,7 +151,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         interactionSource = remember { MutableInteractionSource() }
                     ) { }
             ) {
-                OutlinedTextField(
+                TextField(
                     value = searchText,
                     onValueChange = { searchText = it },
                     placeholder = { Text("Search...") },
@@ -144,15 +159,23 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .background(
-                            color = colorResource(id = R.color.dark),
+                            color = colorResource(id = R.color.gray),
                             shape = RoundedCornerShape(16.dp)
                         )
                         .focusRequester(focusRequester),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Icon",
+                            tint = colorResource(id = R.color.white_50) // Adjust the color as needed
+                        )
+                    },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = colorResource(id = R.color.white),
                         unfocusedTextColor = colorResource(id = R.color.white),
-                        focusedBorderColor = colorResource(id = R.color.primary),
+                        focusedBorderColor = Color.Transparent,
                         unfocusedBorderColor = Color.Transparent,
+                        cursorColor = colorResource(id = R.color.white),
                         unfocusedPlaceholderColor = colorResource(id = R.color.white_50),
                         focusedPlaceholderColor = colorResource(id = R.color.white_50),
                     )
@@ -173,7 +196,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                             item {
                                 LaunchpadRowItem(
                                     icon = null,
-                                    label = calculationResult,
+                                    label = "Equals $calculationResult",
                                     subLabel = "(Copy to clipboard)",
                                     onClick = { copyToClipboard("Calculation", calculationResult)  }
                                 )
@@ -199,7 +222,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                                 )
                             }
                         }
-                        if (settings.isPlayStoreEnabled && apps.size == 0) {
+                        if (settings.isPlayStoreEnabled && apps.isEmpty()) {
                             item {
                                 LaunchpadRowItem(
                                     icon = null,
@@ -210,29 +233,19 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                             }
                         }
                         if (settings.isApplicationsEnabled) {
-                            items(apps) { app ->
-                                val label = app.loadLabel(packageManager).toString()
-                                val iconDrawable = app.loadIcon(packageManager)
-                                val iconBitmap = remember(app) { drawableToImageBitmap(iconDrawable) }
-
+                            items(filteredApps) { app ->
                                 LaunchpadRowItem(
-                                    icon = iconBitmap,
-                                    label = label,
+                                    icon = app.icon,
+                                    label = app.label,
                                     onClick = { onAppClick(app) },
                                     subLabel = null
                                 )
                             }
                         }
                         if (settings.isContactsEnabled) {
-                            items(contacts) { contact ->
-                                val imageBitmap = remember(contact) {
-                                    contact.photoUri?.let { uri ->
-                                        uriToImageBitmap(context, uri)
-                                    }
-                                }
-
+                            items(filteredContacts) { contact ->
                                 LaunchpadRowItem(
-                                    icon = imageBitmap,
+                                    icon = contact.icon,
                                     label = contact.label,
                                     onClick = { onPhoneClick(contact.phoneNumber) },
                                     subLabel = contact.phoneNumber
