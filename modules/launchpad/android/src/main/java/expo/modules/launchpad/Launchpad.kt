@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.text.input.ImeAction
 import com.tencent.mmkv.MMKV
+import kotlinx.coroutines.delay
 
 @Composable
 fun Launchpad(closeLaunchpad: () -> Unit) {
@@ -47,12 +48,8 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     }
 
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
-    val apps = remember {
-        if (settings.isApplicationsEnabled) { getInstalledApps(context) } else emptyList()
-    }
-    val contacts = remember {
-        if (settings.isContactsEnabled) getContacts(context) else emptyList()
-    }
+    var apps by remember { mutableStateOf<List<InstalledApp>>(emptyList()) }
+    var contacts by remember { mutableStateOf<List<Contact>>(emptyList()) }
     val filteredApps = remember(searchText.text) {
         filterAndTake(
             list = apps,
@@ -116,6 +113,17 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     fun copyToClipboard(label: String, text: String) {
         clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text))
         closeLaunchpad()
+    }
+
+
+    LaunchedEffect(settings) {
+        delay(500)
+        if (settings.isApplicationsEnabled) {
+            apps = getInstalledApps(context)
+        }
+        if (settings.isContactsEnabled) {
+            contacts = getContacts(context)
+        }
     }
 
     LaunchedEffect(Unit) {
