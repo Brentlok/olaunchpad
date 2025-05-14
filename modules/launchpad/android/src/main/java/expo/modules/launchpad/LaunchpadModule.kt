@@ -42,18 +42,16 @@ class LaunchpadModule : Module() {
             }
 
             permissionsManager.askForPermissions(
-                object : PermissionsResponseListener {
-                    override fun onResult(results: Map<String, PermissionsResponse>) {
-                        val readContactsPermission = Manifest.permission.READ_CONTACTS
-                        if (results[readContactsPermission]?.status == PermissionsStatus.GRANTED) {
-                            promise.resolve(true)
-                        } else {
-                            promise.reject(
-                                "E_PERMISSIONS_DENIED",
-                                "Read contacts permission denied.",
-                                null
-                            )
-                        }
+                PermissionsResponseListener { results ->
+                    val readContactsPermission = Manifest.permission.READ_CONTACTS
+                    if (results[readContactsPermission]?.status == PermissionsStatus.GRANTED) {
+                        promise.resolve(true)
+                    } else {
+                        promise.reject(
+                            "E_PERMISSIONS_DENIED",
+                            "Read contacts permission denied.",
+                            null
+                        )
                     }
                 },
                 Manifest.permission.READ_CONTACTS
