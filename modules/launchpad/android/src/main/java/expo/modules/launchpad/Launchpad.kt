@@ -25,8 +25,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.net.toUri
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.text.input.ImeAction
 import com.tencent.mmkv.MMKV
 
 @Composable
@@ -167,7 +170,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "Search Icon",
-                            tint = colorResource(id = R.color.white_50) // Adjust the color as needed
+                            tint = colorResource(id = R.color.white_50)
                         )
                     },
                     colors = OutlinedTextFieldDefaults.colors(
@@ -178,6 +181,12 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         cursorColor = colorResource(id = R.color.white),
                         unfocusedPlaceholderColor = colorResource(id = R.color.white_50),
                         focusedPlaceholderColor = colorResource(id = R.color.white_50),
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onSearch = { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}") }
                     )
                 )
                 if (searchText.text.isNotEmpty()) {
