@@ -1,3 +1,4 @@
 export * from './Button'
-export * from './setting'
 export * from './check-permissions'
+export * from './Typography'
+export * from './Switch'

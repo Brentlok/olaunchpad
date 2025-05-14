@@ -1,5 +1,5 @@
-import { Linking, StyleSheet, Text, View } from 'react-native'
-import { Button } from '~/components'
+import { Linking, StyleSheet, View } from 'react-native'
+import { Button, Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { colors } from '~/style'
 
@@ -8,9 +8,12 @@ export const Initial = () => {
     
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>
+            <Typography
+                variant='paragraph'
+                center
+            >
                 {T.screen.initial.title}
-            </Text>
+            </Typography>
             <Button onPress={() => Linking.sendIntent('android.settings.VOICE_INPUT_SETTINGS')}>
                 {T.screen.initial.openSettings}
             </Button>
@@ -25,10 +28,5 @@ const styles = StyleSheet.create({
         padding: 16,
         justifyContent: 'center',
         gap: 32
-    },
-    header: {
-        color: colors.white,
-        fontSize: 18,
-        textAlign: 'center',
-    },
+    }
 })

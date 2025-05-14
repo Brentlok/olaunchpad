@@ -1,9 +1,16 @@
 import { createStore } from 'stan-js'
 import { storage } from 'stan-js/storage'
-import { APP_SETTINGS_NAMES, AppSetting, DEFAULT_APP_SETTINGS } from '~/types'
+import { SEARCH_SETTINGS_NAMES, SearchSetting, DEFAULT_SEARCH_SETTINGS, StyleSetting, DEFAULT_STYLE_SETTINGS, STYLE_SETTINGS_NAMES } from '~/types'
 
-const store = Object.fromEntries(APP_SETTINGS_NAMES.map(name => [name, storage(DEFAULT_APP_SETTINGS[name])])) as {
-    [KSetting in AppSetting]: typeof DEFAULT_APP_SETTINGS[KSetting]
+const searchSettings = Object.fromEntries(SEARCH_SETTINGS_NAMES.map(name => [name, storage(DEFAULT_SEARCH_SETTINGS[name])])) as {
+    [KSetting in SearchSetting]: typeof DEFAULT_SEARCH_SETTINGS[KSetting]
 }
 
-export const { useStore } = createStore(store)
+const styleSettings = Object.fromEntries(STYLE_SETTINGS_NAMES.map(name => [name, storage(DEFAULT_STYLE_SETTINGS[name])])) as {
+    [KSetting in StyleSetting]: typeof DEFAULT_STYLE_SETTINGS[KSetting]
+}
+
+export const { useStore } = createStore({
+    ...searchSettings,
+    ...styleSettings,
+})

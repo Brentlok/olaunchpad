@@ -1,6 +1,7 @@
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { colors } from '~/style'
+import { Typography } from './Typography'
 
 type ButtonProps = {
     children: string,
@@ -16,9 +17,12 @@ export const Button: React.FC<ButtonProps> = ({
             style={state => [styles.button, state.pressed && { opacity: 0.8 }]}
             onPress={onPress}
         >
-            <Text style={styles.buttonText}>
+            <Typography
+                variant="button"
+                center
+            >
                 {children}
-            </Text>
+            </Typography>
         </Pressable>
     )
 }
@@ -34,10 +38,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-    },
-    buttonText: {
-        color: colors.white,
-        fontSize: 18,
-        fontWeight: 'bold',
     }
 })

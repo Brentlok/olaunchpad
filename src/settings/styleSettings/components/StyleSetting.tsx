@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useStore } from '~/store'
 import { textUtils } from '~/utils'
 import { useTranslations } from '~/locale'
-import { AppSetting } from '~/types'
-import { Switch } from './Switch'
+import { StyleSetting as StyleSettingType } from '~/types'
+import { Switch, Typography } from '~/components'
 
-type SettingProps = {
-    setting: AppSetting
+type StyleSettingProps = {
+    setting: StyleSettingType
 }
 
-export const Setting: React.FC<SettingProps> = ({
+export const StyleSetting: React.FC<StyleSettingProps> = ({
     setting
 }) => {
     const T = useTranslations()
@@ -20,9 +20,9 @@ export const Setting: React.FC<SettingProps> = ({
 
     return (
         <View style={styles.settingContainer}>
-            <Text style={styles.settingText}>
-                {T.components.setting[setting]}
-            </Text>
+            <Typography>
+                {T.components.styleSetting[setting]}
+            </Typography>
             <Switch
                 isEnabled={isEnabled}
                 onChange={onChange}
@@ -37,9 +37,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 16
-    },
-    settingText: {
-        fontSize: 16,
-        color: 'white'
     }
 })

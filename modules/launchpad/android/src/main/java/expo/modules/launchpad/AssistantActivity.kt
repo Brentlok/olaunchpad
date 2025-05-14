@@ -15,7 +15,9 @@ class AssistantActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         MMKV.initialize(this)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val isBlurEnabled = MMKV.mmkvWithID("mmkv.default", MMKV.MULTI_PROCESS_MODE).decodeString("isBlurEnabled") == "true"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isBlurEnabled) {
             window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
             window.attributes.blurBehindRadius = 10
         }

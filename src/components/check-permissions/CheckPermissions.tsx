@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { APP_SETTINGS_NAMES } from '~/types'
+import { SEARCH_SETTINGS_NAMES } from '~/types'
 import { CheckContactPermission } from './CheckContactPermission'
 import { useStore } from '~/store'
 import { Launchpad } from '~/modules'
@@ -10,7 +10,7 @@ export const CheckPermissions: React.FC = () => {
     const { willBeActive } = useWillBeActive()
     const [hasContactsPermission, setHasContactsPermission] = useState(() => Launchpad.getHasReadContactsPermission())
 
-    const withoutGrantedPermissions = APP_SETTINGS_NAMES.filter(setting => {
+    const withoutGrantedPermissions = SEARCH_SETTINGS_NAMES.filter(setting => {
         switch (setting) {
             case 'isContactsEnabled':
                 return isContactsEnabled && !hasContactsPermission

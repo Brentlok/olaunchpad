@@ -5,6 +5,7 @@ import { useStore } from '~/store'
 import { useTranslations } from '~/locale'
 import { Modal } from '../Modal'
 import { Button } from '../Button'
+import { Typography } from '../Typography'
 
 type CheckContactPermissionProps = {
     setHasContactsPermission: (hasContactsPermission: boolean) => void
@@ -30,18 +31,24 @@ export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ 
 
     return (
         <Modal>
-            <Text style={[styles.text, styles.gapBottom]}>
+            <Typography
+                variant='paragraph'
+                style={styles.gapBottom}
+            >
                 {T.components.checkPermissions.contacts.description}
-            </Text>
-            <Text style={styles.text}>
+            </Typography>
+            <Typography variant='paragraph'>
                 {T.components.checkPermissions.contacts.grant}
-            </Text>
+            </Typography>
             <Button onPress={handlePermissionRequest}>
                 {T.components.checkPermissions.contacts.grantButton}
             </Button>
-            <Text style={[styles.text, styles.gapTop]}>
+            <Typography
+                variant='paragraph'
+                style={styles.gapTop}
+            >
                 {T.components.checkPermissions.contacts.deny}
-            </Text>
+            </Typography>
             <Button onPress={() => setIsContactsEnabled(false)}>
                 {T.components.checkPermissions.contacts.denyButton}
             </Button>
@@ -55,10 +62,5 @@ const styles = StyleSheet.create({
     },
     gapBottom: {
         marginBottom: 16
-    },
-    text: {
-        fontSize: 18,
-        color: 'white',
-        textAlign: 'center'
     }
 })

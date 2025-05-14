@@ -1,4 +1,4 @@
-import { AppSetting } from '~/types'
+import { SearchSetting } from '~/types'
 
 export const en_US = {
     components: {
@@ -8,8 +8,11 @@ export const en_US = {
             isApplicationsEnabled: 'Search in Applications',
             isContactsEnabled: 'Search in Contacts',
             isPlayStoreEnabled: 'Search in Play Store',
-            isCalculatorEnabled: 'Calculator'
-        } satisfies Record<AppSetting, string>,
+            isCalculatorEnabled: 'Calculator',
+        } satisfies Record<SearchSetting, string>,
+        styleSetting: {
+            isBlurEnabled: 'Blur background'
+        },
         checkPermissions: {
             contacts: {
                 description: 'In order to use this feature, you must allow Olaunchpad to read your contacts.',
@@ -26,8 +29,13 @@ export const en_US = {
             openSettings: 'Open Default Assistant Settings'
         },
         settings: {
-            title: 'Olaunchpad Settings',
+            searchSettings: {
+                title: 'Search Settings',
+            },
+            styleSettings: {
+                title: 'Style Settings',
+            },
             openLaunchpad: 'Open Launchpad'
-        }
+        },
     },
 } as const
