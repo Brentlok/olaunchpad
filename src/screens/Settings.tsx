@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, StatusBar, StyleSheet, View } from 'react-native'
+import { Dimensions, ScrollView, StatusBar, StyleSheet, View } from 'react-native'
 import { Button, CheckPermissions } from '~/components'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
@@ -11,10 +11,14 @@ export const Settings = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.settingsContainer}>
+            <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={styles.settingsContainer}
+            >
                 <SearchSettings />
                 <StyleSettings />
-            </View>
+                <View style={styles.spacer} />
+            </ScrollView>
             <Button onPress={() => Launchpad.open()}>
                 {T.screen.settings.openLaunchpad}
             </Button>
@@ -32,8 +36,14 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight,
         paddingBottom: Dimensions.get('screen').height - Dimensions.get('window').height - (StatusBar.currentHeight ?? 0)
     },
+    scrollView: {
+        marginHorizontal: -16
+    },
     settingsContainer: {
-        flex: 1,
-        gap: 16
+        gap: 16,
+        paddingHorizontal: 16
+    },
+    spacer: {
+        height: 32
     }
 })
