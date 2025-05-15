@@ -10,12 +10,12 @@
         <activity
             android:name="expo.modules.launchpad.AssistantActivity"
             android:label="OLaunchpad"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:theme="@style/Theme.Launchpad.Transparent"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=""
             android:exported="true"
-            fitsSystemWindows="false"
+            android:fitsSystemWindows="false"
         >
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST" />

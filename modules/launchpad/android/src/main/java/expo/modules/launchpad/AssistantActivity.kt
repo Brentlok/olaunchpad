@@ -23,8 +23,9 @@ class AssistantActivity : ComponentActivity() {
             window.attributes.blurBehindRadius = 10
         }
 
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowCompat.setDecorFitsSystemWindows(window, false)
             window.decorView.post {
                 window.insetsController?.let { controller ->
                     controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())

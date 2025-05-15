@@ -147,12 +147,23 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.ime)
         ) {
+            IconButton(
+                onClick = { context.startActivity(packageManager.getLaunchIntentForPackage("com.brentlok.olaunchpad")) },
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Settings Icon",
+                    tint = colorResource(id = R.color.white)
+                )
+            }
+            
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .padding(top = 40.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .background(
                         color = colorResource(id = R.color.black),
                         shape = RoundedCornerShape(16.dp)
@@ -163,70 +174,45 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         interactionSource = remember { MutableInteractionSource() }
                     ) { }
             ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    IconButton(
-                        onClick = { context.startActivity(packageManager.getLaunchIntentForPackage("com.brentlok.olaunchpad")) },
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .offset(
-                                y = (-22).dp,
-                                x = 22.dp
-                            )
-                    ) {
+                TextField(
+                    value = searchText,
+                    onValueChange = { searchText = it },
+                    placeholder = { Text("Search...") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .background(
+                            color = colorResource(id = R.color.gray),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .focusRequester(focusRequester),
+                    leadingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings Icon",
-                            tint = colorResource(id = R.color.white)
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Icon",
+                            tint = colorResource(id = R.color.white_50)
                         )
-                    }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                    ) {
-                        TextField(
-                            value = searchText,
-                            onValueChange = { searchText = it },
-                            placeholder = { Text("Search...") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                                .background(
-                                    color = colorResource(id = R.color.gray),
-                                    shape = RoundedCornerShape(16.dp)
-                                )
-                                .focusRequester(focusRequester),
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = "Search Icon",
-                                    tint = colorResource(id = R.color.white_50)
-                                )
-                            },
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = colorResource(id = R.color.white),
-                                unfocusedTextColor = colorResource(id = R.color.white),
-                                focusedBorderColor = Color.Transparent,
-                                unfocusedBorderColor = Color.Transparent,
-                                cursorColor = colorResource(id = R.color.white),
-                                unfocusedPlaceholderColor = colorResource(id = R.color.white_50),
-                                focusedPlaceholderColor = colorResource(id = R.color.white_50),
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Search
-                            ),
-                            keyboardActions = KeyboardActions(
-                                onSearch = {
-                                    if (searchText.text.isNotEmpty()) {
-                                        onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}")
-                                    }
-                                }
-                            )
-                        )
-                    }
-                }
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = colorResource(id = R.color.white),
+                        unfocusedTextColor = colorResource(id = R.color.white),
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        cursorColor = colorResource(id = R.color.white),
+                        unfocusedPlaceholderColor = colorResource(id = R.color.white_50),
+                        focusedPlaceholderColor = colorResource(id = R.color.white_50),
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onSearch = {
+                            if (searchText.text.isNotEmpty()) {
+                                onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}")
+                            }
+                        }
+                    )
+                )
                 if (searchText.text.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(8.dp))
                     LazyColumn(
