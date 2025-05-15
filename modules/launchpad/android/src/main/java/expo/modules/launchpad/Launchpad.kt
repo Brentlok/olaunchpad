@@ -152,7 +152,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .background(
                         color = colorResource(id = R.color.black),
                         shape = RoundedCornerShape(16.dp)
@@ -269,7 +269,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                                 )
                             }
                         }
-                        if (settings.isPlayStoreEnabled && apps.isEmpty()) {
+                        if (settings.isPlayStoreEnabled && filteredApps.isEmpty()) {
                             item {
                                 LaunchpadRowItem(
                                     icon = null,

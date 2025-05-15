@@ -15,6 +15,7 @@
             android:noHistory="true"
             android:taskAffinity=""
             android:exported="true"
+            fitsSystemWindows="false"
         >
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST" />

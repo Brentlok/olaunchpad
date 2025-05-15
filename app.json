@@ -17,27 +17,8 @@
         "backgroundColor": "#111111"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.brentlok.olaunchpad",
-      "intentFilters": [
-        {
-          "action": "android.intent.action.ASSIST",
-          "category": [
-            "android.intent.category.DEFAULT"
-          ]
-        }
-      ]
+      "package": "com.brentlok.olaunchpad"
     },
-    "plugins": [
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "activityTheme": "@android:style/Theme.DeviceDefault.Dark.Dialog.NoActionBar",
-            "launchMode": "singleTask"
-          }
-        }
-      ]
-    ],
     "extra": {
       "eas": {
         "projectId": "baa9e765-3003-494a-9cd2-584c7b945aac"

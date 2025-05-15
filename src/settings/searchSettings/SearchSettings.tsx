@@ -8,7 +8,7 @@ export const SearchSettings = () => {
     const T = useTranslations()
     
     return (
-        <>
+        <View style={styles.container}>
             <Typography
                 variant="header"
                 center
@@ -23,11 +23,14 @@ export const SearchSettings = () => {
                     />
                 ))}
             </View>
-        </>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        gap: 16
+    },
     settingsContainer: {
         gap: 16,
     },
