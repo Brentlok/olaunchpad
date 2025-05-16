@@ -1,11 +1,4 @@
 package expo.modules.launchpad
-import androidx.compose.ui.graphics.ImageBitmap
-
-data class Contact(
-    val label: String,
-    val phoneNumber: String?,
-    val icon: ImageBitmap?
-)
 
 data class Settings(
     val isBrowserEnabled: Boolean,
@@ -16,8 +9,8 @@ data class Settings(
     val isCalculatorEnabled: Boolean,
 )
 
-data class InstalledApp(
+data class HistoryItem(
+    val type: String,
     val label: String,
-    val icon: ImageBitmap,
-    val packageName: String,
+    val actionValue: String
 )

@@ -1,13 +1,15 @@
 import React from 'react'
-import { Dimensions, ScrollView, StatusBar, StyleSheet, View } from 'react-native'
+import { Dimensions, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Button, CheckPermissions } from '~/components'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
 import { SearchSettings, StyleSettings } from '~/settings'
+import { useStore } from '~/store/store'
 import { colors } from '~/style'
 
 export const Settings = () => {
     const T = useTranslations()
+    const { history } = useStore()
 
     return (
         <View style={styles.container}>
@@ -19,6 +21,9 @@ export const Settings = () => {
                 <StyleSettings />
                 <View style={styles.spacer} />
             </ScrollView>
+            <Text style={{ color: '#fff' }}>
+                {JSON.stringify(history)}
+            </Text>
             <Button onPress={() => Launchpad.open()}>
                 {T.screen.settings.openLaunchpad}
             </Button>

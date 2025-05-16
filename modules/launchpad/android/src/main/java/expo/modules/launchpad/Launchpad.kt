@@ -20,6 +20,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -31,8 +32,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.delay
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
+data class LaunchpadState(
+    val searchText: TextFieldValue,
+    val context: Context,
+    val closeLaunchpad: () -> Unit,
+    val saveLastAction: (historyItem: HistoryItem) -> Unit,
+    val settings: Settings
+)
 
 @Composable
 fun Launchpad(closeLaunchpad: () -> Unit) {
@@ -41,6 +53,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     val context = LocalContext.current
     val packageManager = context.packageManager
     val mmkv = remember { MMKV.mmkvWithID("mmkv.default", MMKV.MULTI_PROCESS_MODE) }
+    val gson = remember { Gson() }
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     var settings by remember {
@@ -48,81 +61,60 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     }
 
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
-    var apps by remember { mutableStateOf<List<InstalledApp>>(emptyList()) }
-    var contacts by remember { mutableStateOf<List<Contact>>(emptyList()) }
-    val filteredApps = remember(searchText.text) {
-        filterAndTake(
-            list = apps,
-            callback =  { it.label.contains(searchText.text, ignoreCase = true) },
-            count = 3
-        )
-    }
-    val filteredContacts = remember(searchText.text) {
-        filterAndTake(
-            list = contacts,
-            callback =  { it.label.contains(searchText.text, ignoreCase = true) || it.phoneNumber.toString().contains(searchText.text, ignoreCase = true) },
-            count = 3
-        )
-    }
+
     val calculation = remember(searchText.text) {
         if (searchText.text.isNotEmpty() && settings.isCalculatorEnabled) evaluateExpression(searchText.text) else null
     }
 
-    fun onOpenURL(url: String) {
-        openUrl(context, url)
-        closeLaunchpad()
-    }
-
-    fun onAppClick(installedApp: InstalledApp) {
-        val launchIntent = packageManager.getLaunchIntentForPackage(installedApp.packageName)
-        context.startActivity(launchIntent)
-        closeLaunchpad()
-    }
-
-    fun onPhoneClick(phone: String?) {
-        if (phone != null) {
-            val intent = Intent(Intent.ACTION_DIAL).apply {
-                data = "tel:$phone".toUri()
-            }
-            context.startActivity(intent)
-        }
-
-        closeLaunchpad()
-    }
-
-    fun onPlayStoreSearch() {
-        val query = Uri.encode(searchText.text)
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = "market://search?q=$query".toUri()
-            setPackage("com.android.vending")
-        }
-        val playStoreAvailable = intent.resolveActivity(context.packageManager) != null
-
-        if (playStoreAvailable) {
-            context.startActivity(intent)
+    val historyList: MutableList<HistoryItem> = remember {
+        val historyJson = mmkv.decodeString("history")
+        val listType = object : TypeToken<MutableList<HistoryItem>>() {}.type
+        if (historyJson != null) {
+            gson.fromJson(historyJson, listType)
         } else {
-            val webIntent = Intent(Intent.ACTION_VIEW).apply {
-                data = "https://play.google.com/store/search?q=$query".toUri()
-            }
-            context.startActivity(webIntent)
+            mutableListOf()
         }
-
-        closeLaunchpad()
     }
+
+    fun saveLastAction(historyItem: HistoryItem) {
+        historyList.add(historyItem)
+        mmkv.encode("history", gson.toJson(historyList))
+    }
+
+    val launchpadState = LaunchpadState(
+        closeLaunchpad = closeLaunchpad,
+        saveLastAction = { historyItem -> saveLastAction(historyItem) },
+        context = context,
+        searchText = searchText,
+        settings = settings
+    )
+
+    val contactsState = getContactsState(launchpadState)
+    val installedAppsState = getInstalledAppsState(launchpadState)
+    val browserState = getBrowserState(launchpadState)
+    val youtubeState = getYoutubeState(launchpadState)
+    val playStoreState = getPlayStoreState(launchpadState)
 
     fun copyToClipboard(label: String, text: String) {
         clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text))
         closeLaunchpad()
     }
 
+    fun onHistoryClick(historyItem: HistoryItem) {
+
+    }
+
+    fun getHistoryLabel(historyItem: HistoryItem): String {
+        return "test"
+    }
 
     LaunchedEffect(settings) {
         delay(500)
         if (settings.isApplicationsEnabled) {
-            apps = getInstalledApps(context)
+            installedAppsState.fetchApps()
         }
         if (settings.isContactsEnabled) {
-            contacts = getContacts(context)
+            contactsState.fetchContacts()
         }
     }
 
@@ -208,11 +200,36 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                     keyboardActions = KeyboardActions(
                         onSearch = {
                             if (searchText.text.isNotEmpty()) {
-                                onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}")
+                                browserState.onBrowserPress(searchText.text)
                             }
                         }
                     )
                 )
+                if (historyList.isNotEmpty()) {
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(historyList.reversed()) { historyItem ->
+                            AssistChip(
+                                onClick = { onHistoryClick(historyItem) },
+                                label = {
+                                    Text(
+                                        text = getHistoryLabel(historyItem),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                },
+                                colors = AssistChipDefaults.assistChipColors(
+                                    containerColor = colorResource(id = R.color.gray),
+                                    labelColor = colorResource(id = R.color.white)
+                                )
+                            )
+                        }
+                    }
+                }
                 if (searchText.text.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(8.dp))
                     LazyColumn(
@@ -237,53 +254,24 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         }
                         if (settings.isBrowserEnabled) {
                             item {
-                                LaunchpadRowItem(
-                                    icon = null,
-                                    label = "Search in browser for '${searchText.text}'",
-                                    subLabel = null,
-                                    onClick = { onOpenURL("https://unduck.link?q=${Uri.encode(searchText.text)}")  }
-                                )
+                                BrowserView(searchText.text, browserState)
                             }
                         }
                         if (settings.isYoutubeEnabled) {
                             item {
-                                LaunchpadRowItem(
-                                    icon = null,
-                                    label = "Search in YouTube for '${searchText.text}'",
-                                    subLabel = null,
-                                    onClick = { onOpenURL("https://www.youtube.com/results?search_query=${Uri.encode(searchText.text)}")  }
-                                )
+                                YoutubeView(searchText.text, youtubeState)
                             }
                         }
-                        if (settings.isPlayStoreEnabled && filteredApps.isEmpty()) {
+                        if (settings.isPlayStoreEnabled && installedAppsState.installedApps.isEmpty()) {
                             item {
-                                LaunchpadRowItem(
-                                    icon = null,
-                                    label = "Search in Play Store for '${searchText.text}'",
-                                    onClick = { onPlayStoreSearch() },
-                                    subLabel = null
-                                )
+                                PlayStoreView(searchText.text, playStoreState)
                             }
                         }
-                        if (settings.isApplicationsEnabled) {
-                            items(filteredApps) { app ->
-                                LaunchpadRowItem(
-                                    icon = app.icon,
-                                    label = app.label,
-                                    onClick = { onAppClick(app) },
-                                    subLabel = null
-                                )
-                            }
+                        items(installedAppsState.installedApps) { app ->
+                            InstalledAppView(app, installedAppsState)
                         }
-                        if (settings.isContactsEnabled) {
-                            items(filteredContacts) { contact ->
-                                LaunchpadRowItem(
-                                    icon = contact.icon,
-                                    label = contact.label,
-                                    onClick = { onPhoneClick(contact.phoneNumber) },
-                                    subLabel = contact.phoneNumber
-                                )
-                            }
+                        items(contactsState.contacts) { contact ->
+                            ContactView(contact, contactsState)
                         }
                     }
                 }
