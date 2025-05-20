@@ -1,11 +1,10 @@
 package expo.modules.launchpad
 
-import android.net.Uri
 import androidx.compose.runtime.*
 
 data class CalculatorState(
     val onCalculatorPress: (query: String) -> Unit,
-    val calculation: Double?
+    val calculation: String?
 )
 
 @Composable
@@ -13,44 +12,40 @@ fun getCalculatorState(launchpad: LaunchpadState): CalculatorState {
     val calculationRaw = remember(launchpad.searchText.text) {
         if (launchpad.searchText.text.isNotEmpty() && launchpad.settings.isCalculatorEnabled) evaluateExpression(launchpad.searchText.text) else null
     }
-    val getCalculation = {
+
+    val calculation = remember(calculationRaw) {
         if (calculationRaw != null) {
             if (calculationRaw % 1.0 == 0.0) {
                 calculationRaw.toInt().toString()
             } else {
                 calculationRaw.toString()
             }
+        } else {
+            null
         }
-
-        calculationRaw
-    }
-
-    fun openQueryInCalculator(query: String) {
-        openUrl(launchpad.context, "https://m.Calculator.com/results?search_query=${Uri.encode(query)}")
-        launchpad.closeLaunchpad()
     }
 
     fun onCalculatorPress(query: String) {
         launchpad.saveLastAction(HistoryItem(
             type = "calculator",
-            label = "Search in Calculator $query",
-            actionValue = query
+            label = "$query=$calculation",
+            actionValue = calculation ?: ""
         ))
-        openQueryInCalculator(query)
+        launchpad.copyToClipboard("Calculation result:", calculation ?: "")
     }
 
     return CalculatorState(
-        onCalculatorPress = { query -> onCalculatorPress(query) },
-        calculation = getCalculation()
+        onCalculatorPress = ::onCalculatorPress,
+        calculation = calculation
     )
 }
 
 @Composable
-fun CalculatorView(query: String, calculation: ) {
+fun CalculatorView(query: String, calculatorState: CalculatorState) {
     LaunchpadRowItem(
         icon = null,
-        label = "$query=",
+        label = "$query=${calculatorState.calculation}",
         subLabel = null,
-        onClick = {  }
+        onClick = { calculatorState.onCalculatorPress(query) }
     )
 }

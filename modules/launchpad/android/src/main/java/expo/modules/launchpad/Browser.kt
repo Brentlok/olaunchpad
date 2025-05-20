@@ -4,7 +4,8 @@ import android.net.Uri
 import androidx.compose.runtime.*
 
 data class BrowserState(
-    val onBrowserPress: (query: String) -> Unit
+    val onBrowserPress: (query: String) -> Unit,
+    val openQueryInBrowser: (query: String) -> Unit
 )
 
 @Composable
@@ -24,7 +25,8 @@ fun getBrowserState(launchpad: LaunchpadState): BrowserState {
     }
 
     return BrowserState(
-        onBrowserPress = { query -> onBrowserPress(query) }
+        onBrowserPress = ::onBrowserPress,
+        openQueryInBrowser = ::openQueryInBrowser
     )
 }
 

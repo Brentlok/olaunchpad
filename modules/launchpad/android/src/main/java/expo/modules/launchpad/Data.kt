@@ -8,9 +8,3 @@ data class Settings(
     val isPlayStoreEnabled: Boolean,
     val isCalculatorEnabled: Boolean,
 )
-
-data class HistoryItem(
-    val type: String,
-    val label: String,
-    val actionValue: String
-)

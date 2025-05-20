@@ -13,7 +13,8 @@ data class Contact(
 data class ContactsState(
     val contacts: List<Contact>,
     val onContactPress: (contact: Contact) -> Unit,
-    val fetchContacts: () -> Unit
+    val fetchContacts: () -> Unit,
+    val callPhone: (phoneNumber: String) -> Unit
 )
 
 @Composable
@@ -49,10 +50,11 @@ fun getContactsState(launchpad: LaunchpadState): ContactsState {
 
     return ContactsState(
         contacts = contacts,
-        onContactPress = { contact -> onContactPress(contact) },
+        onContactPress = ::onContactPress,
         fetchContacts = {
             allContacts = getContacts(launchpad.context)
-        }
+        },
+        callPhone = ::callPhone
     )
 }
 

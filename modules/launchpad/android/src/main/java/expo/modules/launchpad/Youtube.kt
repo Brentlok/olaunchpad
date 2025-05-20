@@ -4,7 +4,8 @@ import android.net.Uri
 import androidx.compose.runtime.*
 
 data class YoutubeState(
-    val onYoutubePress: (query: String) -> Unit
+    val onYoutubePress: (query: String) -> Unit,
+    val openQueryInYoutube: (query: String) -> Unit
 )
 
 @Composable
@@ -24,7 +25,8 @@ fun getYoutubeState(launchpad: LaunchpadState): YoutubeState {
     }
 
     return YoutubeState(
-        onYoutubePress = { query -> onYoutubePress(query) }
+        onYoutubePress = ::onYoutubePress,
+        openQueryInYoutube = ::openQueryInYoutube
     )
 }
 

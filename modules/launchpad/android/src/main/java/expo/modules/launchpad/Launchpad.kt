@@ -3,8 +3,6 @@ package expo.modules.launchpad
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,7 +22,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.core.net.toUri
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,7 +29,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextOverflow
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.delay
 import com.google.gson.Gson
@@ -43,7 +39,9 @@ data class LaunchpadState(
     val context: Context,
     val closeLaunchpad: () -> Unit,
     val saveLastAction: (historyItem: HistoryItem) -> Unit,
-    val settings: Settings
+    val settings: Settings,
+    val copyToClipboard: (label: String, text: String) -> Unit,
+    val reorderHistoryList: (historyItem: HistoryItem) -> Unit
 )
 
 @Composable
@@ -62,10 +60,6 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
 
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
 
-    val calculation = remember(searchText.text) {
-        if (searchText.text.isNotEmpty() && settings.isCalculatorEnabled) evaluateExpression(searchText.text) else null
-    }
-
     val historyList: MutableList<HistoryItem> = remember {
         val historyJson = mmkv.decodeString("history")
         val listType = object : TypeToken<MutableList<HistoryItem>>() {}.type
@@ -77,7 +71,17 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     }
 
     fun saveLastAction(historyItem: HistoryItem) {
-        historyList.add(historyItem)
+        if (historyList.contains(historyItem)) {
+            historyList.remove(historyItem)
+            historyList.add(historyItem)
+        } else {
+            historyList.add(historyItem)
+
+            if (historyList.size > 5) {
+                historyList.subList(0, historyList.size - 5).clear()
+            }
+        }
+
         mmkv.encode("history", gson.toJson(historyList))
     }
 
@@ -86,7 +90,16 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
         saveLastAction = { historyItem -> saveLastAction(historyItem) },
         context = context,
         searchText = searchText,
-        settings = settings
+        settings = settings,
+        copyToClipboard = { label, text ->
+            clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text))
+            closeLaunchpad()
+        },
+        reorderHistoryList = { historyItem ->
+            historyList.remove(historyItem)
+            historyList.add(historyItem)
+            mmkv.encode("history", gson.toJson(historyList))
+        }
     )
 
     val contactsState = getContactsState(launchpadState)
@@ -94,19 +107,15 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     val browserState = getBrowserState(launchpadState)
     val youtubeState = getYoutubeState(launchpadState)
     val playStoreState = getPlayStoreState(launchpadState)
-
-    fun copyToClipboard(label: String, text: String) {
-        clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text))
-        closeLaunchpad()
-    }
-
-    fun onHistoryClick(historyItem: HistoryItem) {
-
-    }
-
-    fun getHistoryLabel(historyItem: HistoryItem): String {
-        return "test"
-    }
+    val calculatorState = getCalculatorState(launchpadState)
+    val historyState = getHistoryState(
+        launchpadState,
+        contactsState,
+        installedAppsState,
+        browserState,
+        youtubeState,
+        playStoreState
+    )
 
     LaunchedEffect(settings) {
         delay(500)
@@ -207,27 +216,10 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                 )
                 if (historyList.isNotEmpty()) {
                     LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(historyList.reversed()) { historyItem ->
-                            AssistChip(
-                                onClick = { onHistoryClick(historyItem) },
-                                label = {
-                                    Text(
-                                        text = getHistoryLabel(historyItem),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                },
-                                colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = colorResource(id = R.color.gray),
-                                    labelColor = colorResource(id = R.color.white)
-                                )
-                            )
-                        }
+                        items(historyList.reversed()) { historyItem -> HistoryView(historyItem, historyState) }
                     }
                 }
                 if (searchText.text.isNotEmpty()) {
@@ -236,36 +228,17 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        if (settings.isCalculatorEnabled && calculation != null) {
-                            val calculationResult = if (calculation % 1.0 == 0.0) {
-                                calculation.toInt().toString()
-                            } else {
-                                calculation.toString()
-                            }
-
-                            item {
-                                LaunchpadRowItem(
-                                    icon = null,
-                                    label = "Equals $calculationResult",
-                                    subLabel = "(Copy to clipboard)",
-                                    onClick = { copyToClipboard("Calculation", calculationResult)  }
-                                )
-                            }
+                        if (settings.isCalculatorEnabled && calculatorState.calculation != null) {
+                            item { CalculatorView(searchText.text, calculatorState) }
                         }
                         if (settings.isBrowserEnabled) {
-                            item {
-                                BrowserView(searchText.text, browserState)
-                            }
+                            item { BrowserView(searchText.text, browserState) }
                         }
                         if (settings.isYoutubeEnabled) {
-                            item {
-                                YoutubeView(searchText.text, youtubeState)
-                            }
+                            item { YoutubeView(searchText.text, youtubeState) }
                         }
                         if (settings.isPlayStoreEnabled && installedAppsState.installedApps.isEmpty()) {
-                            item {
-                                PlayStoreView(searchText.text, playStoreState)
-                            }
+                            item { PlayStoreView(searchText.text, playStoreState) }
                         }
                         items(installedAppsState.installedApps) { app ->
                             InstalledAppView(app, installedAppsState)

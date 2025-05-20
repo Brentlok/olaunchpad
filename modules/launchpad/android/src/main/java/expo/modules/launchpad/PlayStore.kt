@@ -6,7 +6,8 @@ import androidx.compose.runtime.*
 import androidx.core.net.toUri
 
 data class PlayStoreState(
-    val onPlayStorePress: (query: String) -> Unit
+    val onPlayStorePress: (query: String) -> Unit,
+    val openQueryInPlayStore: (query: String) -> Unit
 )
 
 @Composable
@@ -41,7 +42,8 @@ fun getPlayStoreState(launchpad: LaunchpadState): PlayStoreState {
     }
 
     return PlayStoreState(
-        onPlayStorePress = { query -> onPlayStorePress(query) }
+        onPlayStorePress = ::onPlayStorePress,
+        openQueryInPlayStore = ::openQueryInPlayStore
     )
 }
 

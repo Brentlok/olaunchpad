@@ -11,7 +11,8 @@ data class InstalledApp(
 data class InstalledAppsState(
     val installedApps: List<InstalledApp>,
     val onAppPress: (app: InstalledApp) -> Unit,
-    val fetchApps: () -> Unit
+    val fetchApps: () -> Unit,
+    val openApp: (packageName: String) -> Unit
 )
 
 @Composable
@@ -44,10 +45,11 @@ fun getInstalledAppsState(launchpad: LaunchpadState): InstalledAppsState {
 
     return InstalledAppsState(
         apps,
-        onAppPress = { app -> onAppPress(app) },
+        onAppPress = ::onAppPress,
         fetchApps = {
             allApps = getInstalledApps(launchpad.context)
-        }
+        },
+        openApp = ::openApp
     )
 }
 
