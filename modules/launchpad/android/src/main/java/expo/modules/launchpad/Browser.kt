@@ -11,7 +11,7 @@ data class BrowserState(
 @Composable
 fun getBrowserState(launchpad: LaunchpadState): BrowserState {
     fun openQueryInBrowser(query: String) {
-        openUrl(launchpad.context, "https://unduck.link?q=${Uri.encode(query)}")
+        openUrl(launchpad.context, launchpad.settings.defaultBrowser, "https://unduck.link?q=${Uri.encode(query)}")
         launchpad.closeLaunchpad()
     }
 

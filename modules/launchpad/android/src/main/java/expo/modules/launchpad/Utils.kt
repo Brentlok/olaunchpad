@@ -45,21 +45,20 @@ fun getInstalledApps(context: Context): List<InstalledApp> {
     }
 }
 
-fun openUrl(context: Context, url: String) {
+fun openUrl(context: Context, defaultBrowser: String?,  url: String) {
     val pm: PackageManager = context.packageManager
-    val kiwiPackage = "com.kiwibrowser.browser"
     val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-    val isKiwiInstalled = try {
-        pm.getPackageInfo(kiwiPackage, 0)
+    val isBrowserInstalled = try {
+        pm.getPackageInfo(defaultBrowser ?: "", 0)
         true
     } catch (e: Exception) {
         false
     }
 
-    if (isKiwiInstalled) {
-        intent.setPackage(kiwiPackage)
+    if (isBrowserInstalled) {
+        intent.setPackage(defaultBrowser)
     }
 
     context.startActivity(intent)
@@ -131,7 +130,9 @@ fun getSettings(mmkv: MMKV): Settings {
        isApplicationsEnabled = mmkv.decodeString("isApplicationsEnabled") == "true",
        isContactsEnabled = mmkv.decodeString("isContactsEnabled") == "true",
        isPlayStoreEnabled = mmkv.decodeString("isPlayStoreEnabled") == "true",
-       isCalculatorEnabled = mmkv.decodeString("isCalculatorEnabled") == "true"
+       isCalculatorEnabled = mmkv.decodeString("isCalculatorEnabled") == "true",
+       youtubeSearchInBrowser = mmkv.decodeString("youtubeSearchInBrowser") == "true",
+       defaultBrowser = mmkv.decodeString("defaultBrowser")?.removeSurrounding("\"")
    )
 }
 

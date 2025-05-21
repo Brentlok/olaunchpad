@@ -14,7 +14,9 @@
     "react": "19.0.0",
     "react-native": "0.79.2",
     "stan-js": "1.7.0",
-    "react-native-mmkv": "3.2.0"
+    "react-native-mmkv": "3.2.0",
+    "@quidone/react-native-wheel-picker": "1.4.1",
+    "@gorhom/portal": "1.0.14"
   },
   "devDependencies": {
     "@babel/core": "7.27.1",

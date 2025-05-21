@@ -30,7 +30,7 @@ export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ 
     }
 
     return (
-        <Modal>
+        <Modal isOpened>
             <Typography
                 variant='paragraph'
                 style={styles.gapBottom}

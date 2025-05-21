@@ -10,6 +10,14 @@ export const en_US = {
             isPlayStoreEnabled: 'Search in Play Store',
             isCalculatorEnabled: 'Calculator',
         } satisfies Record<SearchSetting, string>,
+        extraSettings: {
+            youtube: {
+                searchInBrowser: 'Search Youtube in browser'
+            },
+            browser: {
+                title: 'Default Browser'
+            }
+        },
         styleSetting: {
             isBlurEnabled: 'Blur background'
         },

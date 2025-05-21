@@ -42,5 +42,8 @@ const styles = StyleSheet.create({
     },
     regular: {
         fontSize: 16,
+    },
+    tiny: {
+        fontSize: 12
     }
 })

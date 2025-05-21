@@ -5,6 +5,7 @@ import { useTranslations } from '~/locale'
 import { SearchSetting as SearchSettingType } from '~/types'
 import { Switch } from '~/components'
 import { Typography } from '~/components'
+import { ExtraSettings } from './extra-settings'
 
 type SearchSettingProps = {
     setting: SearchSettingType
@@ -20,7 +21,8 @@ export const SearchSetting: React.FC<SearchSettingProps> = ({
     const onChange = store[actionKey]
 
     return (
-        <View style={styles.settingContainer}>
+        <>
+            <View style={styles.settingContainer}>
             <Typography>
                 {T.components.setting[setting]}
             </Typography>
@@ -28,7 +30,12 @@ export const SearchSetting: React.FC<SearchSettingProps> = ({
                 isEnabled={isEnabled}
                 onChange={onChange}
             />
-        </View>
+            </View>
+            <ExtraSettings
+                setting={setting}
+                isEnabled={isEnabled}
+            />
+        </>
     )
 }
 

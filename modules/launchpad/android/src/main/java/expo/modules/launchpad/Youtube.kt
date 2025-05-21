@@ -1,5 +1,7 @@
 package expo.modules.launchpad
 
+import android.app.SearchManager
+import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.*
 
@@ -11,7 +13,17 @@ data class YoutubeState(
 @Composable
 fun getYoutubeState(launchpad: LaunchpadState): YoutubeState {
     fun openQueryInYoutube(query: String) {
-        openUrl(launchpad.context, "https://m.youtube.com/results?search_query=${Uri.encode(query)}")
+        if (launchpad.settings.youtubeSearchInBrowser) {
+            openUrl(launchpad.context, launchpad.settings.defaultBrowser, "https://m.youtube.com/results?search_query=${Uri.encode(query)}")
+        } else {
+            val intent = Intent(Intent.ACTION_SEARCH).apply {
+                setPackage("com.google.android.youtube")
+                putExtra(SearchManager.QUERY, query)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            launchpad.context.startActivity(intent)
+        }
+
         launchpad.closeLaunchpad()
     }
 
