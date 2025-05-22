@@ -7,21 +7,24 @@
 
 ## 🌄 Screenshots
 
-<div align="center">
+<div align="center" style="display: flex; flex-wrap: wrap; justify-content: center">
   <img
     src="./assets/screenshots/search.png"
     alt="Olaunchpad Screenshot"
     width="33%"
+    style="object-fit: cover"
   />
   <img
     src="./assets/screenshots/calculator.png"
     alt="Olaunchpad Screenshot"
     width="33%"
+    style="object-fit: cover"
   />
   <img
     src="./assets/screenshots/settings.png"
     alt="Olaunchpad Screenshot"
     width="33%"
+    style="object-fit: cover"
   />
 </div>
 
