@@ -35,7 +35,7 @@
 - History
 - Highly customizable
 
-🏗️ Building From Source
+## 🏗️ Building From Source
 
 1. First you need to get the source code of Olaunchpad
 
