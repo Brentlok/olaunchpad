@@ -11,19 +11,19 @@
   <img
     src="./assets/screenshots/search.png"
     alt="Olaunchpad Screenshot"
-    width="33%"
+    width="32%"
     style="object-fit: cover"
   />
   <img
     src="./assets/screenshots/calculator.png"
     alt="Olaunchpad Screenshot"
-    width="33%"
+    width="32%"
     style="object-fit: cover"
   />
   <img
     src="./assets/screenshots/settings.png"
     alt="Olaunchpad Screenshot"
-    width="33%"
+    width="32%"
     style="object-fit: cover"
   />
 </div>
