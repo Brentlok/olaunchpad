@@ -3,14 +3,14 @@ import { Dimensions, Pressable, StyleSheet, View } from 'react-native'
 import { colors } from '~/style'
 
 type ModalProps = {
-    isOpened: boolean,
+    isOpened: boolean
     onClose?: VoidFunction
 }
 
 export const Modal: React.FC<React.PropsWithChildren<ModalProps>> = ({
     children,
     isOpened,
-    onClose
+    onClose,
 }) => {
     if (!isOpened) {
         return null
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         inset: 0,
         width: Dimensions.get('screen').width,
         height: Dimensions.get('screen').height,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     contentContainer: {
         flexDirection: 'row',
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     },
     backgroundSidePress: {
         width: 16,
-        height: '100%'
+        height: '100%',
     },
     close: {
         position: 'absolute',
@@ -94,6 +94,6 @@ const styles = StyleSheet.create({
         width: 20,
         height: 2,
         backgroundColor: colors.white,
-        transformOrigin: 'center'
-    }
+        transformOrigin: 'center',
+    },
 })

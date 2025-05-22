@@ -1,10 +1,10 @@
 import React from 'react'
-import { Launchpad } from '~/modules'
-import { StyleSheet, Text, Linking } from 'react-native'
-import { useStore } from '~/store'
+import { Linking, StyleSheet, Text } from 'react-native'
 import { useTranslations } from '~/locale'
-import { Modal } from '../Modal'
+import { Launchpad } from '~/modules'
+import { useStore } from '~/store'
 import { Button } from '../Button'
+import { Modal } from '../Modal'
 import { Typography } from '../Typography'
 
 type CheckContactPermissionProps = {
@@ -14,7 +14,7 @@ type CheckContactPermissionProps = {
 export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ setHasContactsPermission }) => {
     const T = useTranslations()
     const { setIsContactsEnabled } = useStore()
-    
+
     const handlePermissionRequest = () => {
         const start = Date.now()
 
@@ -32,19 +32,19 @@ export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ 
     return (
         <Modal isOpened>
             <Typography
-                variant='paragraph'
+                variant="paragraph"
                 style={styles.gapBottom}
             >
                 {T.components.checkPermissions.contacts.description}
             </Typography>
-            <Typography variant='paragraph'>
+            <Typography variant="paragraph">
                 {T.components.checkPermissions.contacts.grant}
             </Typography>
             <Button onPress={handlePermissionRequest}>
                 {T.components.checkPermissions.contacts.grantButton}
             </Button>
             <Typography
-                variant='paragraph'
+                variant="paragraph"
                 style={styles.gapTop}
             >
                 {T.components.checkPermissions.contacts.deny}
@@ -58,9 +58,9 @@ export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ 
 
 const styles = StyleSheet.create({
     gapTop: {
-        marginTop: 16
+        marginTop: 16,
     },
     gapBottom: {
-        marginBottom: 16
-    }
+        marginBottom: 16,
+    },
 })

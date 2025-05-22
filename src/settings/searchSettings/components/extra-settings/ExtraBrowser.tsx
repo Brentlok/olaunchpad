@@ -1,13 +1,13 @@
-import WheelPicker, { PickerItem } from "@quidone/react-native-wheel-picker"
-import React from "react"
-import { useMemo, useState } from "react"
-import { Image, Pressable, PressableStateCallbackType, StyleSheet, View } from "react-native"
-import { Button, Typography } from "~/components"
-import { Modal } from "~/components/Modal"
-import { useTranslations } from "~/locale"
-import { Launchpad } from "~/modules"
-import { useStore } from "~/store"
-import { colors } from "~/style"
+import WheelPicker, { PickerItem } from '@quidone/react-native-wheel-picker'
+import React from 'react'
+import { useMemo, useState } from 'react'
+import { Image, Pressable, PressableStateCallbackType, StyleSheet, View } from 'react-native'
+import { Button, Typography } from '~/components'
+import { Modal } from '~/components/Modal'
+import { useTranslations } from '~/locale'
+import { Launchpad } from '~/modules'
+import { useStore } from '~/store'
+import { colors } from '~/style'
 
 export const ExtraBrowser = () => {
     const T = useTranslations()
@@ -18,9 +18,8 @@ export const ExtraBrowser = () => {
 
     const browsersList = browsers.map(browser => ({
         value: browser.packageName,
-        label: browser.label
+        label: browser.label,
     } satisfies PickerItem<string>))
-
 
     return (
         <View style={styles.container}>
@@ -77,27 +76,27 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8
+        gap: 8,
     },
     item: {
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8
+        gap: 8,
     },
     iconSmall: {
         width: 24,
-        height: 24
+        height: 24,
     },
     icon: {
         width: 40,
-        height: 40
+        height: 40,
     },
     change: {
         borderWidth: 1,
         borderColor: colors.white,
         padding: 8,
         borderRadius: 8,
-        marginLeft: 'auto'
-    }
+        marginLeft: 'auto',
+    },
 })

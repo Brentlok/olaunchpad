@@ -34,16 +34,16 @@ const styles = StyleSheet.create({
         padding: 16,
         position: 'relative',
         paddingTop: StatusBar.currentHeight,
-        paddingBottom: Dimensions.get('screen').height - Dimensions.get('window').height - (StatusBar.currentHeight ?? 0)
+        paddingBottom: Dimensions.get('screen').height - Dimensions.get('window').height - (StatusBar.currentHeight ?? 0),
     },
     scrollView: {
-        marginHorizontal: -16
+        marginHorizontal: -16,
     },
     settingsContainer: {
         gap: 16,
-        paddingHorizontal: 16
+        paddingHorizontal: 16,
     },
     spacer: {
-        height: 32
-    }
+        height: 32,
+    },
 })

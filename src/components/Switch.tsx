@@ -1,31 +1,31 @@
 import React, { useEffect } from 'react'
-import { Pressable, StyleSheet, View, Animated, useAnimatedValue } from 'react-native'
+import { Animated, Pressable, StyleSheet, useAnimatedValue } from 'react-native'
 import { colors } from '~/style'
 
 type SwitchProps = {
-    isEnabled: boolean,
+    isEnabled: boolean
     onChange: (isEnabled: boolean) => void
 }
 
 export const Switch: React.FC<SwitchProps> = ({
     isEnabled,
-    onChange
+    onChange,
 }) => {
     const animationProgress = useAnimatedValue(isEnabled ? 1 : 0)
     const backgroundColor = animationProgress.interpolate({
         inputRange: [0, 1],
-        outputRange: [colors.gray, colors.primary]
+        outputRange: [colors.gray, colors.primary],
     })
     const translateX = animationProgress.interpolate({
         inputRange: [0, 1],
-        outputRange: [-4, 32]
+        outputRange: [-4, 32],
     })
 
     useEffect(() => {
         const animation = Animated.timing(animationProgress, {
             toValue: isEnabled ? 1 : 0,
             duration: 200,
-            useNativeDriver: true
+            useNativeDriver: true,
         })
 
         animation.start()
@@ -63,6 +63,6 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: colors.white
-    }
+        backgroundColor: colors.white,
+    },
 })

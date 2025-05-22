@@ -4,7 +4,7 @@ import { colors } from '~/style'
 import { Typography } from './Typography'
 
 type ButtonProps = {
-    children: string,
+    children: string
     onPress: VoidFunction
 }
 
@@ -38,5 +38,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-    }
+    },
 })

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Launchpad } from '~/modules'
-import { useWillBeActive } from '~/hooks'
-import { Initial, Settings } from './screens'
 import { PortalProvider } from '@gorhom/portal'
+import React, { useEffect, useState } from 'react'
+import { useWillBeActive } from '~/hooks'
+import { Launchpad } from '~/modules'
+import { Initial, Settings } from './screens'
 
 export const App = () => {
     const [isDefaultAssistant, setIsDefaultAssistant] = useState(() => Launchpad.getIsDefaultAssistant())

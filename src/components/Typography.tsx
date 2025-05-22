@@ -3,10 +3,10 @@ import { StyleProp, StyleSheet, Text, TextStyle } from 'react-native'
 import { colors } from '~/style'
 
 type TypographyProps = {
-    children: React.ReactNode,
-    color?: keyof typeof colors,
-    center?: boolean,
-    variant?: keyof typeof styles,
+    children: React.ReactNode
+    color?: keyof typeof colors
+    center?: boolean
+    variant?: keyof typeof styles
     style?: StyleProp<TextStyle>
 }
 
@@ -15,14 +15,14 @@ export const Typography: React.FunctionComponent<TypographyProps> = ({
     color = 'white',
     style,
     center,
-    variant = 'regular'
+    variant = 'regular',
 }) => {
     return (
         <Text
             style={[
                 styles[variant],
                 { color: colors[color], textAlign: center ? 'center' : undefined },
-                style
+                style,
             ]}
         >
             {children}
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     tiny: {
-        fontSize: 12
-    }
+        fontSize: 12,
+    },
 })

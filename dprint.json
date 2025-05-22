@@ -1,0 +1,24 @@
+{
+    "typescript": {
+        "lineWidth": 150,
+        "indentWidth": 4,
+        "semiColons": "asi",
+        "quoteStyle": "alwaysSingle",
+        "trailingCommas": "onlyMultiLine",
+        "preferSingleLine": false,
+        "jsx.quoteStyle": "preferDouble",
+        "constructorType.spaceAfterNewKeyword": true,
+        "constructSignature.spaceAfterNewKeyword": true,
+        "jsx.multiLineParens": "always"
+    },
+    "excludes": [
+        "**/node_modules",
+        "**/*-lock.json",
+        "android",
+        "ios",
+        ".expo"
+    ],
+    "plugins": [
+        "https://plugins.dprint.dev/typescript-0.94.0.wasm"
+    ]
+}

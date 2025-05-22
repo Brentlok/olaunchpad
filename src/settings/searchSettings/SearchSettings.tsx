@@ -1,12 +1,12 @@
-import { StyleSheet, View } from "react-native"
-import { Typography } from "~/components"
-import { useTranslations } from "~/locale"
-import { SEARCH_SETTINGS_NAMES } from "~/types"
-import { SearchSetting } from "./components"
+import { StyleSheet, View } from 'react-native'
+import { Typography } from '~/components'
+import { useTranslations } from '~/locale'
+import { SEARCH_SETTINGS_NAMES } from '~/types'
+import { SearchSetting } from './components'
 
 export const SearchSettings = () => {
     const T = useTranslations()
-    
+
     return (
         <View style={styles.container}>
             <Typography
@@ -29,7 +29,7 @@ export const SearchSettings = () => {
 
 const styles = StyleSheet.create({
     container: {
-        gap: 16
+        gap: 16,
     },
     settingsContainer: {
         gap: 16,

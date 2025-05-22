@@ -5,11 +5,11 @@ import { colors } from '~/style'
 
 export const Initial = () => {
     const T = useTranslations()
-    
+
     return (
         <View style={styles.container}>
             <Typography
-                variant='paragraph'
+                variant="paragraph"
                 center
             >
                 {T.screen.initial.title}
@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.black,
         padding: 16,
         justifyContent: 'center',
-        gap: 32
-    }
+        gap: 32,
+    },
 })

@@ -1,10 +1,10 @@
 import { StyleSheet, View } from 'react-native'
-import { useStore } from '~/store'
-import { textUtils } from '~/utils'
-import { useTranslations } from '~/locale'
-import { SearchSetting as SearchSettingType } from '~/types'
 import { Switch } from '~/components'
 import { Typography } from '~/components'
+import { useTranslations } from '~/locale'
+import { useStore } from '~/store'
+import { SearchSetting as SearchSettingType } from '~/types'
+import { textUtils } from '~/utils'
 import { ExtraSettings } from './extra-settings'
 
 type SearchSettingProps = {
@@ -12,7 +12,7 @@ type SearchSettingProps = {
 }
 
 export const SearchSetting: React.FC<SearchSettingProps> = ({
-    setting
+    setting,
 }) => {
     const T = useTranslations()
     const store = useStore()
@@ -23,13 +23,13 @@ export const SearchSetting: React.FC<SearchSettingProps> = ({
     return (
         <>
             <View style={styles.settingContainer}>
-            <Typography>
-                {T.components.setting[setting]}
-            </Typography>
-            <Switch
-                isEnabled={isEnabled}
-                onChange={onChange}
-            />
+                <Typography>
+                    {T.components.setting[setting]}
+                </Typography>
+                <Switch
+                    isEnabled={isEnabled}
+                    onChange={onChange}
+                />
             </View>
             <ExtraSettings
                 setting={setting}
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 16
-    }
+        gap: 16,
+    },
 })

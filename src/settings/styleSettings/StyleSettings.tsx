@@ -1,7 +1,7 @@
-import { StyleSheet, View } from "react-native"
-import { Typography } from "~/components"
-import { useTranslations } from "~/locale"
-import { StyleSetting } from "./components"
+import { StyleSheet, View } from 'react-native'
+import { Typography } from '~/components'
+import { useTranslations } from '~/locale'
+import { StyleSetting } from './components'
 
 export const StyleSettings = () => {
     const T = useTranslations()
@@ -21,6 +21,6 @@ export const StyleSettings = () => {
 
 const styles = StyleSheet.create({
     container: {
-        gap: 16
-    }
+        gap: 16,
+    },
 })

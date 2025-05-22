@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useWillBeActive } from '~/hooks'
+import { Launchpad } from '~/modules'
+import { useStore } from '~/store'
 import { SEARCH_SETTINGS_NAMES } from '~/types'
 import { CheckContactPermission } from './CheckContactPermission'
-import { useStore } from '~/store'
-import { Launchpad } from '~/modules'
-import { useWillBeActive } from '~/hooks'
 
 export const CheckPermissions: React.FC = () => {
     const { isContactsEnabled } = useStore()

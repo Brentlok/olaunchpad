@@ -7,7 +7,7 @@
     "android": "expo run:android",
     "prebuild": "expo prebuild --clean --platform android",
     "build": "eas build -p android --local --profile preview",
-    "ios": "expo run:ios"
+    "format": "dprint fmt"
   },
   "dependencies": {
     "expo": "53.0.9",
@@ -16,12 +16,14 @@
     "stan-js": "1.7.0",
     "react-native-mmkv": "3.2.0",
     "@quidone/react-native-wheel-picker": "1.4.1",
-    "@gorhom/portal": "1.0.14"
+    "@gorhom/portal": "1.0.14",
+    "react-native-reanimated": "3.17.5"
   },
   "devDependencies": {
     "@babel/core": "7.27.1",
     "@types/react": "19.1.4",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "dprint": "0.50.0"
   },
   "private": true
 }
