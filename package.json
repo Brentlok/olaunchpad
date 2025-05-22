@@ -1,7 +1,8 @@
 {
   "name": "olaunchpad",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "index.ts",
+  "license": "MIT",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
@@ -21,7 +22,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.27.1",
-    "@types/react": "19.1.4",
+    "@types/react": "19.1.5",
     "typescript": "5.8.3",
     "dprint": "0.50.0"
   },
