@@ -1,8 +1,8 @@
 import WheelPicker, { PickerItem } from '@quidone/react-native-wheel-picker'
 import React from 'react'
 import { useMemo, useState } from 'react'
-import { Image, Pressable, PressableStateCallbackType, StyleSheet, View } from 'react-native'
-import { Button, Typography } from '~/components'
+import { Image, Pressable, StyleSheet, View } from 'react-native'
+import { Typography } from '~/components'
 import { Modal } from '~/components/Modal'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
@@ -39,7 +39,7 @@ export const ExtraBrowser = () => {
                 </Typography>
             </Pressable>
             <Modal
-                isOpened={isPickerOpened}
+                isVisible={isPickerOpened}
                 onClose={() => setIsPickerOpened(false)}
             >
                 <Typography variant="header">

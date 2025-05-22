@@ -1,4 +1,5 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
+import Animated, { LinearTransition, ReduceMotion } from 'react-native-reanimated'
 import { Switch } from '~/components'
 import { Typography } from '~/components'
 import { useTranslations } from '~/locale'
@@ -22,7 +23,10 @@ export const SearchSetting: React.FC<SearchSettingProps> = ({
 
     return (
         <>
-            <View style={styles.settingContainer}>
+            <Animated.View
+                layout={LinearTransition.reduceMotion(ReduceMotion.Never)}
+                style={styles.settingContainer}
+            >
                 <Typography>
                     {T.components.setting[setting]}
                 </Typography>
@@ -30,7 +34,7 @@ export const SearchSetting: React.FC<SearchSettingProps> = ({
                     isEnabled={isEnabled}
                     onChange={onChange}
                 />
-            </View>
+            </Animated.View>
             <ExtraSettings
                 setting={setting}
                 isEnabled={isEnabled}

@@ -1,4 +1,5 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
+import Animated, { LinearTransition, ReduceMotion } from 'react-native-reanimated'
 import { Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { StyleSetting } from './components'
@@ -7,7 +8,10 @@ export const StyleSettings = () => {
     const T = useTranslations()
 
     return (
-        <View style={styles.container}>
+        <Animated.View
+            layout={LinearTransition.reduceMotion(ReduceMotion.Never)}
+            style={styles.container}
+        >
             <Typography
                 variant="header"
                 center
@@ -15,7 +19,7 @@ export const StyleSettings = () => {
                 {T.screen.settings.styleSettings.title}
             </Typography>
             <StyleSetting setting="isBlurEnabled" />
-        </View>
+        </Animated.View>
     )
 }
 

@@ -1,24 +1,29 @@
 import { Portal } from '@gorhom/portal'
 import { Dimensions, Pressable, StyleSheet, View } from 'react-native'
+import Animated, { FadeIn, FadeOut, ReduceMotion } from 'react-native-reanimated'
 import { colors } from '~/style'
 
 type ModalProps = {
-    isOpened: boolean
+    isVisible: boolean
     onClose?: VoidFunction
 }
 
 export const Modal: React.FC<React.PropsWithChildren<ModalProps>> = ({
     children,
-    isOpened,
+    isVisible,
     onClose,
 }) => {
-    if (!isOpened) {
+    if (!isVisible) {
         return null
     }
 
     return (
         <Portal>
-            <View style={styles.modal}>
+            <Animated.View
+                entering={FadeIn.reduceMotion(ReduceMotion.Never)}
+                exiting={FadeOut.reduceMotion(ReduceMotion.Never)}
+                style={styles.modal}
+            >
                 <Pressable
                     style={styles.backgroundPress}
                     onPress={onClose}
@@ -50,7 +55,7 @@ export const Modal: React.FC<React.PropsWithChildren<ModalProps>> = ({
                     style={styles.backgroundPress}
                     onPress={onClose}
                 />
-            </View>
+            </Animated.View>
         </Portal>
     )
 }

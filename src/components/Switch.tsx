@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { Animated, Pressable, StyleSheet, useAnimatedValue } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
+import Animated, { interpolate, interpolateColor, ReduceMotion, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { colors } from '~/style'
 
 type SwitchProps = {
@@ -11,26 +12,34 @@ export const Switch: React.FC<SwitchProps> = ({
     isEnabled,
     onChange,
 }) => {
-    const animationProgress = useAnimatedValue(isEnabled ? 1 : 0)
-    const backgroundColor = animationProgress.interpolate({
-        inputRange: [0, 1],
-        outputRange: [colors.gray, colors.primary],
-    })
-    const translateX = animationProgress.interpolate({
-        inputRange: [0, 1],
-        outputRange: [-4, 32],
-    })
+    const animationProgress = useSharedValue(isEnabled ? 1 : 0)
+    const animatedBackground = useAnimatedStyle(() => ({
+        backgroundColor: interpolateColor(
+            animationProgress.value,
+            [0, 1],
+            [colors.gray, colors.primary],
+        ),
+    }))
+    const animatedThumb = useAnimatedStyle(() => ({
+        transform: [
+            {
+                translateX: interpolate(
+                    animationProgress.value,
+                    [0, 1],
+                    [-4, 32],
+                ),
+            },
+        ],
+    }))
 
     useEffect(() => {
-        const animation = Animated.timing(animationProgress, {
-            toValue: isEnabled ? 1 : 0,
-            duration: 200,
-            useNativeDriver: true,
-        })
-
-        animation.start()
-
-        return () => animation.stop()
+        animationProgress.set(withTiming(
+            isEnabled ? 1 : 0,
+            {
+                duration: 200,
+                reduceMotion: ReduceMotion.Never,
+            },
+        ))
     }, [isEnabled])
 
     return (
@@ -39,9 +48,9 @@ export const Switch: React.FC<SwitchProps> = ({
             onPress={() => onChange(!isEnabled)}
             hitSlop={8}
         >
-            <Animated.View style={[styles.tint, { backgroundColor }]}>
+            <Animated.View style={[styles.tint, animatedBackground]}>
                 <Animated.View
-                    style={[styles.thumb, { transform: [{ translateX }] }]}
+                    style={[styles.thumb, animatedThumb]}
                 />
             </Animated.View>
         </Pressable>

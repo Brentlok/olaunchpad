@@ -5,11 +5,18 @@ export const useWillBeActive = () => {
     const [willBeActive, setWillBeActive] = useState(false)
 
     useEffect(() => {
-        const listener = AppState.addEventListener('change', (nextState: string) => {
-            setWillBeActive(nextState === 'active')
+        const focusListener = AppState.addEventListener('focus', () => {
+            setWillBeActive(true)
         })
 
-        return () => listener.remove()
+        const blurListener = AppState.addEventListener('blur', () => {
+            setWillBeActive(false)
+        })
+
+        return () => {
+            focusListener.remove()
+            blurListener.remove()
+        }
     }, [])
 
     return {

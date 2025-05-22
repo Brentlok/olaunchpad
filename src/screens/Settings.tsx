@@ -1,5 +1,7 @@
 import React from 'react'
-import { Dimensions, ScrollView, StatusBar, StyleSheet, View } from 'react-native'
+import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, View } from 'react-native'
+import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
+import { Images } from '~/assets'
 import { Button, CheckPermissions } from '~/components'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
@@ -10,7 +12,15 @@ export const Settings = () => {
     const T = useTranslations()
 
     return (
-        <View style={styles.container}>
+        <Animated.View
+            entering={SlideInRight}
+            exiting={SlideOutRight}
+            style={styles.container}
+        >
+            <Image
+                source={Images.logo}
+                style={styles.logo}
+            />
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.settingsContainer}
@@ -23,7 +33,7 @@ export const Settings = () => {
                 {T.screen.settings.openLaunchpad}
             </Button>
             <CheckPermissions />
-        </View>
+        </Animated.View>
     )
 }
 
@@ -45,5 +55,10 @@ const styles = StyleSheet.create({
     },
     spacer: {
         height: 32,
+    },
+    logo: {
+        width: 80,
+        height: 80,
+        marginHorizontal: 'auto',
     },
 })
