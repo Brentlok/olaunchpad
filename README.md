@@ -59,6 +59,14 @@ bun run build
 bun run android
 ```
 
+## 📁 Structure
+
+```
+olaunchpad/
+├── modules/launchpad - Native Kotlin module for overlay
+└── src/ - React Native app source code
+```
+
 ## 📋 License
 
 MIT License
