@@ -49,7 +49,13 @@ git clone git@github.com:Brentlok/olaunchpad.git
 bun install
 ```
 
-3. Build the app or run it in development mode
+3. Prebuild native modules
+
+```bash
+bun run prebuild
+```
+
+4. Build the app or run it in development mode
 
 ```bash
 # Build the app
