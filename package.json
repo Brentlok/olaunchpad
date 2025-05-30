@@ -1,6 +1,6 @@
 {
   "name": "olaunchpad",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
@@ -8,7 +8,8 @@
     "android": "expo run:android",
     "prebuild": "expo prebuild --clean --platform android",
     "build": "eas build -p android --local --profile preview",
-    "format": "dprint fmt"
+    "format": "dprint fmt",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "expo": "53.0.9",

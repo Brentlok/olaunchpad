@@ -21,7 +21,10 @@ fun getInstalledAppsState(launchpad: LaunchpadState): InstalledAppsState {
     val apps = remember(launchpad.searchText.text) {
         filterAndTake(
             list = allApps,
-            callback =  { it.label.contains(launchpad.searchText.text, ignoreCase = true) },
+            callback =  {
+                it.label.contains(launchpad.searchText.text, ignoreCase = true) ||
+                it.packageName.contains(launchpad.searchText.text, ignoreCase = true)
+            },
             count = 3
         )
     }

@@ -39,3 +39,4 @@ modules/launchpad/android/build
 android
 
 !modules/launchpad/android
+build*.apk
