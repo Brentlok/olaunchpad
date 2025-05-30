@@ -1,13 +1,13 @@
 import WheelPicker, { PickerItem } from '@quidone/react-native-wheel-picker'
 import React from 'react'
 import { useMemo, useState } from 'react'
-import { Image, Pressable, StyleSheet, View } from 'react-native'
+import { Image, Pressable, View } from 'react-native'
 import { Typography } from '~/components'
 import { Modal } from '~/components/Modal'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
 import { useStore } from '~/store'
-import { colors } from '~/style'
+import { colors, createStyles } from '~/style'
 
 export const ExtraBrowser = () => {
     const T = useTranslations()
@@ -72,17 +72,17 @@ export const ExtraBrowser = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8,
+        gap: theme.gap(1),
     },
     item: {
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8,
+        gap: theme.gap(1),
     },
     iconSmall: {
         width: 24,
@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     change: {
         borderWidth: 1,
         borderColor: colors.white,
-        padding: 8,
-        borderRadius: 8,
+        padding: theme.gap(1),
+        borderRadius: theme.gap(1),
         marginLeft: 'auto',
     },
-})
+}))

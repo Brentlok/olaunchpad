@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Pressable } from 'react-native'
 import Animated, { interpolate, interpolateColor, ReduceMotion, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
-import { colors } from '~/style'
+import { colors, createStyles } from '~/style'
 
 type SwitchProps = {
     isEnabled: boolean
@@ -57,7 +57,7 @@ export const Switch: React.FC<SwitchProps> = ({
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     container: {
         width: 60,
         height: 28,
@@ -72,6 +72,6 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: colors.white,
+        backgroundColor: theme.colors.white,
     },
-})
+}))

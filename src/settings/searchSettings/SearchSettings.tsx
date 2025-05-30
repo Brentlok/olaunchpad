@@ -1,6 +1,7 @@
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { Typography } from '~/components'
 import { useTranslations } from '~/locale'
+import { createStyles } from '~/style'
 import { SEARCH_SETTINGS_NAMES } from '~/types'
 import { SearchSetting } from './components'
 
@@ -27,11 +28,11 @@ export const SearchSettings = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     container: {
-        gap: 16,
+        gap: theme.gap(2),
     },
     settingsContainer: {
-        gap: 16,
+        gap: theme.gap(2),
     },
-})
+}))

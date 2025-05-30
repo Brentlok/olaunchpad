@@ -1,8 +1,9 @@
 import React from 'react'
-import { Linking, StyleSheet, Text } from 'react-native'
+import { Linking } from 'react-native'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
 import { useStore } from '~/store'
+import { createStyles } from '~/style'
 import { Button } from '../Button'
 import { Modal } from '../Modal'
 import { Typography } from '../Typography'
@@ -59,11 +60,11 @@ export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ 
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     gapTop: {
-        marginTop: 16,
+        marginTop: theme.gap(2),
     },
     gapBottom: {
-        marginBottom: 16,
+        marginBottom: theme.gap(2),
     },
-})
+}))

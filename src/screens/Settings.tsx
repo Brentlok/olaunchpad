@@ -1,12 +1,12 @@
 import React from 'react'
-import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, View } from 'react-native'
+import { Dimensions, Image, ScrollView, StatusBar, View } from 'react-native'
 import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
 import { Images } from '~/assets'
 import { Button, CheckPermissions } from '~/components'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
 import { SearchSettings, StyleSettings } from '~/settings'
-import { colors } from '~/style'
+import { colors, createStyles } from '~/style'
 
 export const Settings = () => {
     const T = useTranslations()
@@ -37,7 +37,7 @@ export const Settings = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles({
     container: {
         flex: 1,
         backgroundColor: colors.black,

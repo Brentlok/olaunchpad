@@ -1,7 +1,8 @@
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { Switch, Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { useStore } from '~/store'
+import { createStyles } from '~/style'
 import { StyleSetting as StyleSettingType } from '~/types'
 import { textUtils } from '~/utils'
 
@@ -31,11 +32,11 @@ export const StyleSetting: React.FC<StyleSettingProps> = ({
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     settingContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 16,
+        gap: theme.gap(2),
     },
-})
+}))

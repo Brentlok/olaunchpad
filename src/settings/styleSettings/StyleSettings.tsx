@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native'
 import Animated, { LinearTransition, ReduceMotion } from 'react-native-reanimated'
 import { Typography } from '~/components'
 import { useTranslations } from '~/locale'
+import { createStyles } from '~/style'
 import { StyleSetting } from './components'
 
 export const StyleSettings = () => {
@@ -23,8 +23,8 @@ export const StyleSettings = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     container: {
-        gap: 16,
+        gap: theme.gap(2),
     },
-})
+}))

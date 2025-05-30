@@ -1,6 +1,6 @@
 import React from 'react'
-import { StyleProp, StyleSheet, Text, TextStyle } from 'react-native'
-import { colors } from '~/style'
+import { StyleProp, Text, TextStyle } from 'react-native'
+import { colors, createStyles } from '~/style'
 
 type TypographyProps = {
     children: React.ReactNode
@@ -30,7 +30,7 @@ export const Typography: React.FunctionComponent<TypographyProps> = ({
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles({
     header: {
         fontSize: 24,
     },

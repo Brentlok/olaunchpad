@@ -1,9 +1,9 @@
-import { Image, Linking, StyleSheet } from 'react-native'
+import { Image, Linking } from 'react-native'
 import Animated, { SlideInLeft, SlideOutLeft } from 'react-native-reanimated'
 import { Images } from '~/assets'
 import { Button, Typography } from '~/components'
 import { useTranslations } from '~/locale'
-import { colors } from '~/style'
+import { colors, createStyles } from '~/style'
 
 export const Initial = () => {
     const T = useTranslations()
@@ -31,7 +31,7 @@ export const Initial = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles({
     container: {
         flex: 1,
         backgroundColor: colors.black,

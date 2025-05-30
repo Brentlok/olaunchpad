@@ -1,8 +1,8 @@
 import { Portal } from '@gorhom/portal'
-import { Dimensions, Pressable, StyleSheet, View } from 'react-native'
+import { Dimensions, Pressable, View } from 'react-native'
 import Animated, { FadeIn, FadeOut, ReduceMotion } from 'react-native-reanimated'
 import { useBackHandler } from '~/hooks'
-import { colors } from '~/style'
+import { createStyles } from '~/style'
 
 type ModalProps = {
     isVisible: boolean
@@ -71,7 +71,7 @@ export const Modal: React.FC<React.PropsWithChildren<ModalProps>> = ({
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     modal: {
         position: 'absolute',
         inset: 0,
@@ -84,16 +84,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     content: {
-        backgroundColor: colors.dark,
+        backgroundColor: theme.colors.dark,
         borderWidth: 1,
-        borderColor: colors.primary,
+        borderColor: theme.colors.primary,
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-        gap: 16,
-        borderRadius: 16,
-        paddingVertical: 32,
-        paddingHorizontal: 16,
+        gap: theme.gap(2),
+        borderRadius: theme.gap(2),
+        paddingVertical: theme.gap(4),
+        paddingHorizontal: theme.gap(2),
     },
     backgroundPress: {
         flex: 1,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     closeIcon: {
         width: 20,
         height: 2,
-        backgroundColor: colors.white,
+        backgroundColor: theme.colors.white,
         transformOrigin: 'center',
     },
-})
+}))

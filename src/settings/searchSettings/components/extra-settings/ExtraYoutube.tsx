@@ -1,8 +1,9 @@
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { Switch } from '~/components'
 import { Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { useStore } from '~/store'
+import { createStyles } from '~/style'
 
 export const ExtraYoutube = () => {
     const T = useTranslations()
@@ -21,11 +22,11 @@ export const ExtraYoutube = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     settingContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 16,
+        gap: theme.gap(2),
     },
-})
+}))

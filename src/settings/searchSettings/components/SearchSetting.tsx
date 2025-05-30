@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native'
 import Animated, { LinearTransition, ReduceMotion } from 'react-native-reanimated'
 import { Switch } from '~/components'
 import { Typography } from '~/components'
@@ -7,6 +6,7 @@ import { useStore } from '~/store'
 import { SearchSetting as SearchSettingType } from '~/types'
 import { textUtils } from '~/utils'
 import { ExtraSettings } from './extra-settings'
+import { createStyles } from '~/style'
 
 type SearchSettingProps = {
     setting: SearchSettingType
@@ -43,11 +43,11 @@ export const SearchSetting: React.FC<SearchSettingProps> = ({
     )
 }
 
-const styles = StyleSheet.create({
+const styles = createStyles(theme => ({
     settingContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 16,
+        gap: theme.gap(2),
     },
-})
+}))

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Pressable, StyleSheet } from 'react-native'
-import { colors } from '~/style'
+import { Pressable, PressableStateCallbackType } from 'react-native'
+import { createStyles } from '~/style'
 import { Typography } from './Typography'
 
 type ButtonProps = {
@@ -14,7 +14,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
     return (
         <Pressable
-            style={state => [styles.button, state.pressed && { opacity: 0.8 }]}
+            style={styles.button}
             onPress={onPress}
         >
             <Typography
@@ -27,16 +27,17 @@ export const Button: React.FC<ButtonProps> = ({
     )
 }
 
-const styles = StyleSheet.create({
-    button: {
+const styles = createStyles(theme => ({
+    button: (state: PressableStateCallbackType) => ({
         flexGrow: 1,
         height: 56,
         minHeight: 56,
         maxHeight: 56,
         width: '100%',
-        backgroundColor: colors.primary,
+        backgroundColor: theme.colors.primary,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
-    },
-})
+        borderRadius: theme.gap(1),
+        opacity: state.pressed ? 0.8 : 1,
+    }),
+}))
