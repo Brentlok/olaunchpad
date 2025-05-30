@@ -230,7 +230,10 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         if (settings.isPlayStoreEnabled && installedAppsState.installedApps.isEmpty()) {
                             item { PlayStoreView(searchText.text, playStoreState) }
                         }
-                        items(installedAppsState.installedApps) { app ->
+                        items(
+                            items = installedAppsState.installedApps,
+                            key = { app -> app.packageName }
+                        ) { app ->
                             InstalledAppView(app, installedAppsState)
                         }
                         items(contactsState.contacts) { contact ->

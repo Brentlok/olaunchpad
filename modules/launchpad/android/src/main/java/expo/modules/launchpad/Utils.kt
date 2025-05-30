@@ -45,14 +45,12 @@ suspend fun getInstalledApps(context: Context): List<InstalledApp> =
             try {
                 val packageName = resolveInfo.activityInfo.packageName
                 val label = resolveInfo.loadLabel(pm).toString()
-                val iconDrawable = resolveInfo.loadIcon(pm)
-                val iconBitmap = drawableToImageBitmap(iconDrawable)
 
                 if (packageName.isNotEmpty() && label.isNotEmpty()) {
                     InstalledApp(
                         label = label,
-                        icon = iconBitmap,
-                        packageName = packageName
+                        packageName = packageName,
+                        resolveInfo = resolveInfo
                     )
                 } else {
                     null

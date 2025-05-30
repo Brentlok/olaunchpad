@@ -1,24 +1,32 @@
 package expo.modules.launchpad
-import androidx.compose.ui.graphics.ImageBitmap
+
+import android.content.pm.ResolveInfo
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.ui.graphics.ImageBitmap
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 data class InstalledApp(
     val label: String,
-    val icon: ImageBitmap,
+    val resolveInfo: ResolveInfo,
     val packageName: String,
 )
 
 data class InstalledAppsState(
     val installedApps: List<InstalledApp>,
     val onAppPress: (app: InstalledApp) -> Unit,
-    val openApp: (packageName: String) -> Unit
+    val openApp: (packageName: String) -> Unit,
+    val launchpad: LaunchpadState,
+    val iconCache: SnapshotStateMap<String, ImageBitmap>
 )
 
 @Composable
 fun getInstalledAppsState(launchpad: LaunchpadState): InstalledAppsState {
     var allApps by remember { mutableStateOf<List<InstalledApp>>(emptyList()) }
     val coroutineScope = rememberCoroutineScope()
+    val iconCache = remember { mutableStateMapOf<String, ImageBitmap>() }
 
     val apps = remember(launchpad.searchText.text, allApps) {
         filterAndTake(
@@ -64,16 +72,42 @@ fun getInstalledAppsState(launchpad: LaunchpadState): InstalledAppsState {
     return InstalledAppsState(
         apps,
         onAppPress = ::onAppPress,
-        openApp = ::openApp
+        openApp = ::openApp,
+        launchpad = launchpad,
+        iconCache = iconCache
     )
 }
 
 @Composable
 fun InstalledAppView(app: InstalledApp, installedAppsState: InstalledAppsState) {
+    val context = installedAppsState.launchpad.context
+    val packageManager = context.packageManager
+
+    val iconBitmap by produceState(
+        initialValue = installedAppsState.iconCache[app.packageName],
+        key1 = app.packageName,
+        key2 = packageManager,
+    ) {
+        if (value != null) {
+            return@produceState
+        }
+
+        try {
+            val loadedBitmap = withContext(Dispatchers.IO) {
+                val iconDrawable = app.resolveInfo.loadIcon(packageManager)
+                drawableToImageBitmap(iconDrawable)
+            }
+            installedAppsState.iconCache[app.packageName] = loadedBitmap
+            value = loadedBitmap
+        } catch (e: Exception) {
+            value = null
+        }
+    }
+
     LaunchpadRowItem(
-        icon = app.icon,
+        icon = iconBitmap,
         label = app.label,
         onClick = { installedAppsState.onAppPress(app) },
-        subLabel = null
+        subLabel = null,
     )
 }
