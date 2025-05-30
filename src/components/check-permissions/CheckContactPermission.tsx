@@ -30,7 +30,10 @@ export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ 
     }
 
     return (
-        <Modal isVisible>
+        <Modal
+            isVisible
+            onClose={() => setIsContactsEnabled(false)}
+        >
             <Typography
                 variant="paragraph"
                 style={styles.gapBottom}
