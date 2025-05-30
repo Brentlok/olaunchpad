@@ -117,16 +117,6 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
         playStoreState
     )
 
-    LaunchedEffect(settings) {
-        delay(500)
-        if (settings.isApplicationsEnabled) {
-            installedAppsState.fetchApps()
-        }
-        if (settings.isContactsEnabled) {
-            contactsState.fetchContacts()
-        }
-    }
-
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
         keyboardController?.show()

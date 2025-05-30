@@ -1,6 +1,7 @@
 package expo.modules.launchpad
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.runtime.*
+import kotlinx.coroutines.launch
 
 data class InstalledApp(
     val label: String,
@@ -11,14 +12,15 @@ data class InstalledApp(
 data class InstalledAppsState(
     val installedApps: List<InstalledApp>,
     val onAppPress: (app: InstalledApp) -> Unit,
-    val fetchApps: () -> Unit,
     val openApp: (packageName: String) -> Unit
 )
 
 @Composable
 fun getInstalledAppsState(launchpad: LaunchpadState): InstalledAppsState {
     var allApps by remember { mutableStateOf<List<InstalledApp>>(emptyList()) }
-    val apps = remember(launchpad.searchText.text) {
+    val coroutineScope = rememberCoroutineScope()
+
+    val apps = remember(launchpad.searchText.text, allApps) {
         filterAndTake(
             list = allApps,
             callback =  {
@@ -46,12 +48,22 @@ fun getInstalledAppsState(launchpad: LaunchpadState): InstalledAppsState {
         openApp(app.packageName)
     }
 
+    LaunchedEffect(key1 = true) {
+        if (launchpad.settings.isApplicationsEnabled) {
+            coroutineScope.launch {
+                try {
+                    val fetchedAppsList = getInstalledApps(launchpad.context)
+                    allApps = fetchedAppsList
+                } catch (e: Exception) {
+                    allApps = emptyList()
+                }
+            }
+        }
+    }
+
     return InstalledAppsState(
         apps,
         onAppPress = ::onAppPress,
-        fetchApps = {
-            allApps = getInstalledApps(launchpad.context)
-        },
         openApp = ::openApp
     )
 }

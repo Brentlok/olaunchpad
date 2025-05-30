@@ -11,12 +11,16 @@ import androidx.compose.ui.graphics.asImageBitmap
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.provider.ContactsContract
 import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
 import com.tencent.mmkv.MMKV
 import java.util.Stack
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 fun drawableToImageBitmap(drawable: Drawable): ImageBitmap {
     val bitmap = createBitmap(
@@ -30,20 +34,34 @@ fun drawableToImageBitmap(drawable: Drawable): ImageBitmap {
     return bitmap.asImageBitmap()
 }
 
-fun getInstalledApps(context: Context): List<InstalledApp> {
-    val pm = context.packageManager
-    val intent = Intent(Intent.ACTION_MAIN, null)
-    intent.addCategory(Intent.CATEGORY_LAUNCHER)
-    val apps = pm.queryIntentActivities(intent, 0)
+suspend fun getInstalledApps(context: Context): List<InstalledApp> =
+    withContext(Dispatchers.IO) {
+        val pm = context.packageManager
+        val intent = Intent(Intent.ACTION_MAIN, null)
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        val appsInfo = pm.queryIntentActivities(intent, 0)
 
-    return apps.map {
-        InstalledApp(
-            label = it.loadLabel(context.packageManager).toString(),
-            icon = drawableToImageBitmap(it.loadIcon(context.packageManager)),
-            packageName = it.activityInfo.packageName
-        )
+        appsInfo.mapNotNull { resolveInfo ->
+            try {
+                val packageName = resolveInfo.activityInfo.packageName
+                val label = resolveInfo.loadLabel(pm).toString()
+                val iconDrawable = resolveInfo.loadIcon(pm)
+                val iconBitmap = drawableToImageBitmap(iconDrawable)
+
+                if (packageName.isNotEmpty() && label.isNotEmpty()) {
+                    InstalledApp(
+                        label = label,
+                        icon = iconBitmap,
+                        packageName = packageName
+                    )
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
+                null
+            }
+        }
     }
-}
 
 fun openUrl(context: Context, defaultBrowser: String?,  url: String) {
     val pm: PackageManager = context.packageManager
@@ -64,47 +82,60 @@ fun openUrl(context: Context, defaultBrowser: String?,  url: String) {
     context.startActivity(intent)
 }
 
-fun getContacts(context: Context): List<Contact> {
+suspend fun getContacts(context: Context): List<Contact> {
     val permission = Manifest.permission.READ_CONTACTS
-    val granted = context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+    val granted =
+        context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
     if (!granted) {
         return emptyList()
     }
 
-    val contactsList = mutableListOf<Contact>()
+    return withContext(Dispatchers.IO) {
+        val contactsList = mutableListOf<Contact>()
 
-    // Define the columns to retrieve
-    val projection = arrayOf(
-        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-        ContactsContract.CommonDataKinds.Phone.NUMBER,
-        ContactsContract.CommonDataKinds.Phone.PHOTO_URI
-    )
+        val projection = arrayOf(
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER,
+            ContactsContract.CommonDataKinds.Phone.PHOTO_URI
+        )
 
-    // Query the contacts database
-    val cursor: Cursor? = context.contentResolver.query(
-        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-        projection,
-        null,
-        null,
-        null
-    )
+        val cursor: Cursor? = context.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            projection,
+            null,
+            null,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+        )
 
-    // Process the cursor
-    cursor?.use {
-        val nameIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-        val numberIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-        val photoIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI)
-        while (it.moveToNext()) {
-            val name = it.getString(nameIndex)
-            val phoneNumber = it.getString(numberIndex)
-            val photoUri = it.getString(photoIndex)?.toUri()
+        cursor?.use {
+            val nameIndex =
+                it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val numberIndex =
+                it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+            val photoIndex =
+                it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI)
 
-            contactsList.add(Contact(name, phoneNumber, uriToImageBitmap(context, photoUri)))
+            if (nameIndex == -1 || numberIndex == -1 || photoIndex == -1) {
+                return@withContext emptyList<Contact>()
+            }
+
+            while (it.moveToNext()) {
+                val name = it.getString(nameIndex)
+                val phoneNumber = it.getString(numberIndex)
+                val photoUriString = it.getString(photoIndex)
+                val photoUri = photoUriString?.toUri()
+
+                val photoBitmap = if (photoUri != null) {
+                    uriToImageBitmap(context, photoUri)
+                } else {
+                    null
+                }
+                contactsList.add(Contact(name, phoneNumber, photoBitmap))
+            }
         }
+        contactsList
     }
-
-    return contactsList
 }
 
 fun uriToImageBitmap(context: Context, uri: Uri?): ImageBitmap? {
@@ -113,12 +144,15 @@ fun uriToImageBitmap(context: Context, uri: Uri?): ImageBitmap? {
     }
 
     return try {
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-        inputStream?.close()
-        bitmap?.asImageBitmap()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val source = ImageDecoder.createSource(context.contentResolver, uri)
+            ImageDecoder.decodeBitmap(source).asImageBitmap()
+        } else {
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                BitmapFactory.decodeStream(inputStream)?.asImageBitmap()
+            }
+        }
     } catch (e: Exception) {
-        e.printStackTrace()
         null
     }
 }

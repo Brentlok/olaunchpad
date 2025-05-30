@@ -3,6 +3,7 @@ import android.content.Intent
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.core.net.toUri
 import androidx.compose.runtime.*
+import kotlinx.coroutines.launch
 
 data class Contact(
     val label: String,
@@ -13,14 +14,15 @@ data class Contact(
 data class ContactsState(
     val contacts: List<Contact>,
     val onContactPress: (contact: Contact) -> Unit,
-    val fetchContacts: () -> Unit,
     val callPhone: (phoneNumber: String) -> Unit
 )
 
 @Composable
 fun getContactsState(launchpad: LaunchpadState): ContactsState {
     var allContacts by remember { mutableStateOf<List<Contact>>(emptyList()) }
-    val contacts = remember(launchpad.searchText.text) {
+    val coroutineScope = rememberCoroutineScope()
+
+    val contacts = remember(launchpad.searchText.text, allContacts) {
         filterAndTake(
             list = allContacts,
             callback =  { it.label.contains(launchpad.searchText.text, ignoreCase = true) || it.phoneNumber.toString().contains(launchpad.searchText.text, ignoreCase = true) },
@@ -48,12 +50,22 @@ fun getContactsState(launchpad: LaunchpadState): ContactsState {
         launchpad.closeLaunchpad()
     }
 
+    LaunchedEffect(key1 = true) {
+        if (launchpad.settings.isContactsEnabled) {
+            coroutineScope.launch {
+                try {
+                    val fetchedContactsList = getContacts(launchpad.context)
+                    allContacts = fetchedContactsList
+                } catch (e: Exception) {
+                    allContacts = emptyList()
+                }
+            }
+        }
+    }
+
     return ContactsState(
         contacts = contacts,
         onContactPress = ::onContactPress,
-        fetchContacts = {
-            allContacts = getContacts(launchpad.context)
-        },
         callPhone = ::callPhone
     )
 }
