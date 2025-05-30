@@ -19,11 +19,11 @@
     "react-native-mmkv": "3.2.0",
     "@quidone/react-native-wheel-picker": "1.4.1",
     "@gorhom/portal": "1.0.14",
-    "react-native-reanimated": "3.17.5"
+    "react-native-reanimated": "3.18.0"
   },
   "devDependencies": {
-    "@babel/core": "7.27.1",
-    "@types/react": "19.1.5",
+    "@babel/core": "7.27.3",
+    "@types/react": "19.1.6",
     "typescript": "5.8.3",
     "dprint": "0.50.0"
   },
