@@ -2,6 +2,7 @@ import { PortalProvider } from '@gorhom/portal'
 import React, { useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useWillBeActive } from '~/hooks'
 import { Launchpad } from '~/modules'
 import { Initial, Settings } from './screens'
@@ -24,10 +25,12 @@ export const App = () => {
     }, [willBeActive])
 
     return (
-        <GestureHandlerRootView>
-            <PortalProvider>
-                {isDefaultAssistant ? <Settings /> : <Initial />}
-            </PortalProvider>
-        </GestureHandlerRootView>
+        <SafeAreaProvider>
+            <GestureHandlerRootView>
+                <PortalProvider>
+                    {isDefaultAssistant ? <Settings /> : <Initial />}
+                </PortalProvider>
+            </GestureHandlerRootView>
+        </SafeAreaProvider>
     )
 }

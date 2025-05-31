@@ -1,21 +1,29 @@
 import React from 'react'
-import { Dimensions, Image, ScrollView, StatusBar, View } from 'react-native'
+import { Image, ScrollView, StatusBar, View } from 'react-native'
 import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Images } from '~/assets'
 import { Button, CheckPermissions } from '~/components'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
 import { SearchSettings, StyleSettings } from '~/settings'
-import { colors, createStyles } from '~/style'
+import { createStyles } from '~/style'
 
 export const Settings = () => {
     const T = useTranslations()
+    const insets = useSafeAreaInsets()
 
     return (
         <Animated.View
             entering={SlideInRight}
             exiting={SlideOutRight}
-            style={styles.container}
+            style={[
+                styles.container,
+                {
+                    paddingTop: insets.top,
+                    paddingBottom: insets.bottom,
+                },
+            ]}
         >
             <Image
                 source={Images.logo}
@@ -44,7 +52,6 @@ const styles = createStyles(theme => ({
         padding: theme.gap(2),
         position: 'relative',
         paddingTop: StatusBar.currentHeight,
-        paddingBottom: Dimensions.get('screen').height - Dimensions.get('window').height - (StatusBar.currentHeight ?? 0),
     },
     scrollView: {
         marginHorizontal: theme.gap(-2),
