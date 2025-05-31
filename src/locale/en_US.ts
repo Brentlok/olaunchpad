@@ -16,10 +16,14 @@ export const en_US = {
             },
             browser: {
                 title: 'Default Browser',
+                action: 'Change default browser',
             },
         },
         styleSetting: {
             isBlurEnabled: 'Blur background',
+            accentColor: 'Accent color',
+            changeAccentColor: 'Change color',
+            accentColorPreview: 'That\'s how it looks',
         },
         checkPermissions: {
             contacts: {

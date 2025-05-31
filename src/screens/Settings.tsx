@@ -37,21 +37,21 @@ export const Settings = () => {
     )
 }
 
-const styles = createStyles({
+const styles = createStyles(theme => ({
     container: {
         flex: 1,
-        backgroundColor: colors.black,
-        padding: 16,
+        backgroundColor: theme.colors.black,
+        padding: theme.gap(2),
         position: 'relative',
         paddingTop: StatusBar.currentHeight,
         paddingBottom: Dimensions.get('screen').height - Dimensions.get('window').height - (StatusBar.currentHeight ?? 0),
     },
     scrollView: {
-        marginHorizontal: -16,
+        marginHorizontal: theme.gap(-2),
     },
     settingsContainer: {
-        gap: 16,
-        paddingHorizontal: 16,
+        gap: theme.gap(4),
+        paddingHorizontal: theme.gap(2),
     },
     spacer: {
         height: 32,
@@ -61,4 +61,4 @@ const styles = createStyles({
         height: 80,
         marginHorizontal: 'auto',
     },
-})
+}))

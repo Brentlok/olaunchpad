@@ -5,7 +5,7 @@ import { colors, createStyles } from '~/style'
 
 type SwitchProps = {
     isEnabled: boolean
-    onChange: (isEnabled: boolean) => void
+    onChange?: (isEnabled: boolean) => void
 }
 
 export const Switch: React.FC<SwitchProps> = ({
@@ -17,7 +17,7 @@ export const Switch: React.FC<SwitchProps> = ({
         backgroundColor: interpolateColor(
             animationProgress.value,
             [0, 1],
-            [colors.gray, colors.primary],
+            [colors.gray, colors.accent.get()],
         ),
     }))
     const animatedThumb = useAnimatedStyle(() => ({
@@ -45,7 +45,7 @@ export const Switch: React.FC<SwitchProps> = ({
     return (
         <Pressable
             style={styles.container}
-            onPress={() => onChange(!isEnabled)}
+            onPress={() => onChange?.(!isEnabled)}
             hitSlop={8}
         >
             <Animated.View style={[styles.tint, animatedBackground]}>

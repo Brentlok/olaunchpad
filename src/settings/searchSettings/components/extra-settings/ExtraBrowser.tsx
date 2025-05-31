@@ -2,8 +2,8 @@ import WheelPicker, { PickerItem } from '@quidone/react-native-wheel-picker'
 import React from 'react'
 import { useMemo, useState } from 'react'
 import { Image, Pressable, View } from 'react-native'
-import { Typography } from '~/components'
-import { Modal } from '~/components/Modal'
+import Animated from 'react-native-reanimated'
+import { Button, Modal, Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
 import { useStore } from '~/store'
@@ -30,14 +30,14 @@ export const ExtraBrowser = () => {
                 source={{ uri: `data:image/png;base64,${iconsByBrowsers[defaultBrowser]}` }}
                 style={styles.iconSmall}
             />
-            <Pressable
+            <Button
+                isTiny
                 onPress={() => setIsPickerOpened(true)}
-                style={state => [styles.change, { opacity: state.pressed ? 0.8 : 1 }]}
+                variant="outline"
+                style={styles.changeButton}
             >
-                <Typography variant="tiny">
-                    Change default browser
-                </Typography>
-            </Pressable>
+                {T.components.extraSettings.browser.action}
+            </Button>
             <Modal
                 isVisible={isPickerOpened}
                 onClose={() => setIsPickerOpened(false)}
@@ -49,13 +49,14 @@ export const ExtraBrowser = () => {
                     data={browsersList}
                     value={defaultBrowser}
                     onValueChanged={({ item }) => setDefaultBrowser(item.value)}
-                    itemHeight={50}
+                    itemHeight={64}
+                    overlayItemStyle={styles.overlayItem}
                     visibleItemCount={3}
                     renderItem={({ item }) => {
                         const icon = iconsByBrowsers[item.value]
 
                         return (
-                            <View style={styles.item}>
+                            <Animated.View style={styles.item}>
                                 <Image
                                     source={{ uri: `data:image/png;base64,${icon}` }}
                                     style={styles.icon}
@@ -63,7 +64,7 @@ export const ExtraBrowser = () => {
                                 <Typography variant="header">
                                     {item.label}
                                 </Typography>
-                            </View>
+                            </Animated.View>
                         )
                     }}
                 />
@@ -79,10 +80,14 @@ const styles = createStyles(theme => ({
         gap: theme.gap(1),
     },
     item: {
+        marginTop: theme.gap(.5),
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
         gap: theme.gap(1),
+        backgroundColor: theme.colors.accent,
+        padding: theme.gap(1),
+        borderRadius: theme.gap(1),
     },
     iconSmall: {
         width: 24,
@@ -92,11 +97,10 @@ const styles = createStyles(theme => ({
         width: 40,
         height: 40,
     },
-    change: {
-        borderWidth: 1,
-        borderColor: colors.white,
-        padding: theme.gap(1),
-        borderRadius: theme.gap(1),
+    changeButton: {
         marginLeft: 'auto',
+    },
+    overlayItem: {
+        display: 'none',
     },
 }))

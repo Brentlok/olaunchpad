@@ -1,7 +1,10 @@
+import { makeMutable } from 'react-native-reanimated'
+import { getState } from '~/store'
+
 export const colors = {
-    black: '#111111',
+    black: '#1A1A1D',
     gray: '#666666',
-    dark: '#3B1E54',
-    primary: '#9B7EBD',
+    dark: '#222831',
+    accent: makeMutable(getState().accentColor),
     white: '#EEEEEE',
 }

@@ -1,43 +1,70 @@
 import React from 'react'
-import { Pressable, PressableStateCallbackType } from 'react-native'
+import { Pressable, PressableStateCallbackType, StyleProp, Text, View, ViewStyle } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { createStyles } from '~/style'
-import { Typography } from './Typography'
 
 type ButtonProps = {
+    style?: StyleProp<ViewStyle>
     children: string
-    onPress: VoidFunction
+    variant?: 'primary' | 'outline'
+    isTiny?: boolean
+    onPress?: VoidFunction
 }
 
 export const Button: React.FC<ButtonProps> = ({
+    variant = 'primary',
+    isTiny = false,
+    style,
     children,
     onPress,
 }) => {
     return (
         <Pressable
-            style={styles.button}
+            style={state => [styles.buttonContainer(state, isTiny), style]}
             onPress={onPress}
         >
-            <Typography
-                variant="button"
-                center
+            <Animated.View
+                style={[
+                    styles.button,
+                    styles[variant],
+                ]}
             >
-                {children}
-            </Typography>
+                <Text style={styles.buttonText(isTiny)}>
+                    {children}
+                </Text>
+            </Animated.View>
         </Pressable>
     )
 }
 
 const styles = createStyles(theme => ({
-    button: (state: PressableStateCallbackType) => ({
+    button: {
         flexGrow: 1,
-        height: 56,
-        minHeight: 56,
-        maxHeight: 56,
         width: '100%',
-        backgroundColor: theme.colors.primary,
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: theme.gap(1),
+        paddingHorizontal: theme.gap(1),
+    },
+    buttonText: (isTiny: boolean) => ({
+        textAlign: 'center',
+        fontSize: isTiny ? 12 : 18,
+        color: theme.colors.white,
+    }),
+    primary: {
+        backgroundColor: theme.colors.accent,
+    },
+    outline: {
+        borderWidth: 1,
+        borderColor: theme.colors.white,
+    },
+    buttonContainer: (state: PressableStateCallbackType, isTiny: boolean) => ({
         opacity: state.pressed ? 0.8 : 1,
+        flex: isTiny ? undefined : 1,
+        width: isTiny ? 'auto' : '100%',
+        height: isTiny ? 32 : 56,
+        minHeight: isTiny ? 32 : 56,
+        maxHeight: isTiny ? 32 : 56,
     }),
 }))

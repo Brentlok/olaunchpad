@@ -1,3 +1,4 @@
+import { ColorValue } from 'react-native'
 import { createStore } from 'stan-js'
 import { storage } from 'stan-js/storage'
 import { Launchpad } from '~/modules'
@@ -19,9 +20,10 @@ const styleSettings = Object.fromEntries(STYLE_SETTINGS_NAMES.map(name => [name,
     [KSetting in StyleSetting]: typeof DEFAULT_STYLE_SETTINGS[KSetting]
 }
 
-export const { useStore } = createStore({
+export const { useStore, getState } = createStore({
     ...searchSettings,
     ...styleSettings,
+    accentColor: storage('#9B7EBD'),
     history: storage<Array<HistoryItem>>([]),
     youtubeSearchInBrowser: storage(false),
     defaultBrowser: storage<string>(Launchpad.getDefaultBrowser()),

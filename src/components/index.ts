@@ -1,4 +1,5 @@
 export * from './Button'
 export * from './check-permissions'
+export * from './Modal'
 export * from './Switch'
 export * from './Typography'

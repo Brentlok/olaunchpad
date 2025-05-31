@@ -1,7 +1,5 @@
-import { ImageStyle, TextStyle, ViewStyle } from 'react-native'
+import type { AnimatedStyle } from 'react-native-reanimated'
 import { colors } from './colors'
-
-type AnyStyle = ViewStyle | TextStyle | ImageStyle
 
 const theme = {
     colors,
@@ -10,7 +8,9 @@ const theme = {
 
 type Theme = typeof theme
 
-export const createStyles = <T extends Record<string, AnyStyle | ((...params: Array<any>) => AnyStyle)>>(stylesheet: ((theme: Theme) => T) | T) => {
+export const createStyles = <T extends Record<string, AnimatedStyle | ((...params: Array<any>) => AnimatedStyle)>>(
+    stylesheet: ((theme: Theme) => T) | T,
+) => {
     const computedStylesheet = typeof stylesheet === 'function'
         ? stylesheet(theme)
         : stylesheet

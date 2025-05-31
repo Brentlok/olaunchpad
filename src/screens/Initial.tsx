@@ -3,7 +3,7 @@ import Animated, { SlideInLeft, SlideOutLeft } from 'react-native-reanimated'
 import { Images } from '~/assets'
 import { Button, Typography } from '~/components'
 import { useTranslations } from '~/locale'
-import { colors, createStyles } from '~/style'
+import { createStyles } from '~/style'
 
 export const Initial = () => {
     const T = useTranslations()
@@ -31,17 +31,17 @@ export const Initial = () => {
     )
 }
 
-const styles = createStyles({
+const styles = createStyles(theme => ({
     container: {
         flex: 1,
-        backgroundColor: colors.black,
-        padding: 16,
+        backgroundColor: theme.colors.black,
+        padding: theme.gap(2),
         justifyContent: 'center',
-        gap: 32,
+        gap: theme.gap(4),
     },
     logo: {
         width: 80,
         height: 80,
         marginHorizontal: 'auto',
     },
-})
+}))

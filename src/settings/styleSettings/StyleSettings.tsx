@@ -2,7 +2,7 @@ import Animated, { LinearTransition, ReduceMotion } from 'react-native-reanimate
 import { Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { createStyles } from '~/style'
-import { StyleSetting } from './components'
+import { AccentColor, StyleSetting } from './components'
 
 export const StyleSettings = () => {
     const T = useTranslations()
@@ -19,6 +19,7 @@ export const StyleSettings = () => {
                 {T.screen.settings.styleSettings.title}
             </Typography>
             <StyleSetting setting="isBlurEnabled" />
+            <AccentColor />
         </Animated.View>
     )
 }

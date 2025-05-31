@@ -1,5 +1,6 @@
 import React from 'react'
-import { StyleProp, Text, TextStyle } from 'react-native'
+import { StyleProp, TextStyle } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { colors, createStyles } from '~/style'
 
 type TypographyProps = {
@@ -18,7 +19,7 @@ export const Typography: React.FunctionComponent<TypographyProps> = ({
     variant = 'regular',
 }) => {
     return (
-        <Text
+        <Animated.Text
             style={[
                 styles[variant],
                 { color: colors[color], textAlign: center ? 'center' : undefined },
@@ -26,16 +27,13 @@ export const Typography: React.FunctionComponent<TypographyProps> = ({
             ]}
         >
             {children}
-        </Text>
+        </Animated.Text>
     )
 }
 
 const styles = createStyles({
     header: {
         fontSize: 24,
-    },
-    button: {
-        fontSize: 18,
     },
     paragraph: {
         fontSize: 18,

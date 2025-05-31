@@ -3,10 +3,10 @@ import { Switch } from '~/components'
 import { Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { useStore } from '~/store'
+import { createStyles } from '~/style'
 import { SearchSetting as SearchSettingType } from '~/types'
 import { textUtils } from '~/utils'
 import { ExtraSettings } from './extra-settings'
-import { createStyles } from '~/style'
 
 type SearchSettingProps = {
     setting: SearchSettingType

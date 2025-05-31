@@ -31,8 +31,8 @@ export const Modal: React.FC<React.PropsWithChildren<ModalProps>> = ({
     return (
         <Portal>
             <Animated.View
-                entering={FadeIn.reduceMotion(ReduceMotion.Never).duration(300)}
-                exiting={FadeOut.reduceMotion(ReduceMotion.Never).duration(300)}
+                // entering={FadeIn.duration(300).reduceMotion(ReduceMotion.Never)}
+                // exiting={FadeOut.duration(300).reduceMotion(ReduceMotion.Never)}
                 style={styles.modal}
             >
                 <Pressable
@@ -86,7 +86,7 @@ const styles = createStyles(theme => ({
     content: {
         backgroundColor: theme.colors.dark,
         borderWidth: 1,
-        borderColor: theme.colors.primary,
+        borderColor: theme.colors.gray,
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,

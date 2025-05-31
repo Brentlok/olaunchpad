@@ -1,5 +1,6 @@
 import { PortalProvider } from '@gorhom/portal'
 import React, { useEffect, useState } from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated'
 import { useWillBeActive } from '~/hooks'
 import { Launchpad } from '~/modules'
@@ -23,8 +24,10 @@ export const App = () => {
     }, [willBeActive])
 
     return (
-        <PortalProvider>
-            {isDefaultAssistant ? <Settings /> : <Initial />}
-        </PortalProvider>
+        <GestureHandlerRootView>
+            <PortalProvider>
+                {isDefaultAssistant ? <Settings /> : <Initial />}
+            </PortalProvider>
+        </GestureHandlerRootView>
     )
 }
