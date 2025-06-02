@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking } from 'react-native'
+import { Dimensions, Linking, View } from 'react-native'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
 import { useStore } from '~/store'
@@ -35,27 +35,33 @@ export const CheckContactPermission: React.FC<CheckContactPermissionProps> = ({ 
             isVisible
             onClose={() => setIsContactsEnabled(false)}
         >
-            <Typography
-                variant="paragraph"
-                style={styles.gapBottom}
-            >
-                {T.components.checkPermissions.contacts.description}
-            </Typography>
-            <Typography variant="paragraph">
-                {T.components.checkPermissions.contacts.grant}
-            </Typography>
-            <Button onPress={handlePermissionRequest}>
-                {T.components.checkPermissions.contacts.grantButton}
-            </Button>
-            <Typography
-                variant="paragraph"
-                style={styles.gapTop}
-            >
-                {T.components.checkPermissions.contacts.deny}
-            </Typography>
-            <Button onPress={() => setIsContactsEnabled(false)}>
-                {T.components.checkPermissions.contacts.denyButton}
-            </Button>
+            <View style={styles.container}>
+                <Typography
+                    variant="paragraph"
+                    style={styles.gapBottom}
+                >
+                    {T.components.checkPermissions.contacts.description}
+                </Typography>
+                <Typography variant="paragraph">
+                    {T.components.checkPermissions.contacts.grant}
+                </Typography>
+                <View style={styles.buttonContainer}>
+                    <Button onPress={handlePermissionRequest}>
+                        {T.components.checkPermissions.contacts.grantButton}
+                    </Button>
+                </View>
+                <Typography
+                    variant="paragraph"
+                    style={styles.gapTop}
+                >
+                    {T.components.checkPermissions.contacts.deny}
+                </Typography>
+                <View style={styles.buttonContainer}>
+                    <Button onPress={() => setIsContactsEnabled(false)}>
+                        {T.components.checkPermissions.contacts.denyButton}
+                    </Button>
+                </View>
+            </View>
         </Modal>
     )
 }
@@ -66,5 +72,12 @@ const styles = createStyles(theme => ({
     },
     gapBottom: {
         marginBottom: theme.gap(2),
+    },
+    container: {
+        gap: theme.gap(2),
+    },
+    buttonContainer: {
+        width: Dimensions.get('window').width - theme.gap(6),
+        height: 56,
     },
 }))

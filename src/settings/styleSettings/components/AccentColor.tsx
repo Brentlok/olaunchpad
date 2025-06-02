@@ -84,10 +84,9 @@ const styles = createStyles(theme => ({
         justifyContent: 'space-between',
         gap: theme.gap(2),
     },
-    colorPreviewButton: (state: PressableStateCallbackType) => ({
-        opacity: state.pressed ? 0.8 : 1,
+    colorPreviewButton: {
         flex: 1,
-    }),
+    },
     colorPreview: {
         flex: 1,
     },
