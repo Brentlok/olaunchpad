@@ -1,0 +1,35 @@
+diff --git a/src/base/item/PickerItemContainer.tsx b/src/base/item/PickerItemContainer.tsx
+index 8a91c2a397b9e5db9eae1679c471f0e457a62d3a..8e91ea12befef5845d1a4087ff3d18e84bb9a13d 100644
+--- a/src/base/item/PickerItemContainer.tsx
++++ b/src/base/item/PickerItemContainer.tsx
+@@ -20,7 +20,7 @@ const PickerItemContainer = ({
+ }: PickerItemContainerProps) => {
+   const offset = useScrollContentOffset();
+   const height = usePickerItemHeight();
+-  const {opacity, rotateX, translateY} = useMemo(() => {
++  const {opacity, translateY} = useMemo(() => {
+     const inputRange = faces.map((f) => height * (index + f.index));
+     return {
+       opacity: offset.interpolate({
+@@ -28,11 +28,6 @@ const PickerItemContainer = ({
+         outputRange: faces.map((x) => x.opacity),
+         extrapolate: 'clamp',
+       }),
+-      rotateX: offset.interpolate({
+-        inputRange: inputRange,
+-        outputRange: faces.map((x) => `${x.deg}deg`),
+-        extrapolate: 'extend',
+-      }),
+       translateY: offset.interpolate({
+         inputRange: inputRange,
+         outputRange: faces.map((x) => x.offsetY),
+@@ -51,9 +46,6 @@ const PickerItemContainer = ({
+               translateY,
+             },
+             // first translateY, then rotateX for correct transformation.
+-            {
+-              rotateX,
+-            },
+             {
+               perspective: 1000,
+             }, // without this line this Animation will not render on Android https://reactnative.dev/docs/animations#bear-in-mind

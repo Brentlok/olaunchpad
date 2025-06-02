@@ -30,5 +30,8 @@
     "typescript": "5.8.3",
     "dprint": "0.50.0"
   },
-  "private": true
+  "private": true,
+  "patchedDependencies": {
+    "@quidone/react-native-wheel-picker@1.4.1": "patches/@quidone%2Freact-native-wheel-picker@1.4.1.patch"
+  }
 }
