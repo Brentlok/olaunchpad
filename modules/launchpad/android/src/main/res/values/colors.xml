@@ -2,7 +2,6 @@
     <color name="black">#111111</color>
     <color name="gray">#666666</color>
     <color name="dark">#3B1E54</color>
-    <color name="primary">#9B7EBD</color>
     <color name="white">#EEEEEE</color>
     <color name="white_50">#80EEEEEE</color>
 </resources>

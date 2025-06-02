@@ -31,8 +31,8 @@ export const Modal: React.FC<React.PropsWithChildren<ModalProps>> = ({
     return (
         <Portal>
             <Animated.View
-                // entering={FadeIn.duration(300).reduceMotion(ReduceMotion.Never)}
-                // exiting={FadeOut.duration(300).reduceMotion(ReduceMotion.Never)}
+                entering={FadeIn.duration(300).reduceMotion(ReduceMotion.Never)}
+                exiting={FadeOut.duration(300).reduceMotion(ReduceMotion.Never)}
                 style={styles.modal}
             >
                 <Pressable

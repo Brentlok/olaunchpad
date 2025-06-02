@@ -22,6 +22,8 @@ fun LaunchpadRowItem(
     subLabel: String?,
     onClick: () -> Unit
 ) {
+    val appColors = LocalAppColors.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -29,7 +31,7 @@ fun LaunchpadRowItem(
             .clickable { onClick() }
             .height(56.dp)
             .background(
-                color = colorResource(id = R.color.primary),
+                color = appColors.accentColor,
                 shape = RoundedCornerShape(16.dp)
             )
             .padding(horizontal = 16.dp)

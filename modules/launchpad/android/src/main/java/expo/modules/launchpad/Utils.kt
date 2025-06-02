@@ -15,6 +15,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.ContactsContract
+import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
 import com.tencent.mmkv.MMKV
@@ -291,4 +292,15 @@ fun <T> filterAndTake(
         }
     }
     return result
+}
+
+fun parseHexColor(hexColor: String?): Color {
+    return try {
+        val cleanHex = hexColor?.removePrefix("#") ?: "000000"
+        val colorLong = cleanHex.toLong(16) or 0xFF000000L
+
+        Color(colorLong)
+    } catch (e: IllegalArgumentException) {
+        Color.Black
+    }
 }

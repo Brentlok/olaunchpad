@@ -58,6 +58,7 @@ export const AccentColor = () => {
                     value={colors.accent.get()}
                     onChange={onChangeColor}
                 >
+                    <Preview style={styles.preview} />
                     <LuminanceCircular
                         style={styles.colorPanelCircular}
                         containerStyle={styles.colorPanelCircularContainer}
@@ -108,5 +109,8 @@ const styles = createStyles(theme => ({
         flexDirection: 'row',
         alignItems: 'center',
         gap: theme.gap(2),
+    },
+    preview: {
+        marginBottom: theme.gap(2),
     },
 }))

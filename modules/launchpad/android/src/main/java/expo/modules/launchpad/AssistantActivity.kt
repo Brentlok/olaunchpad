@@ -8,6 +8,8 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import com.tencent.mmkv.MMKV
 
@@ -45,7 +47,14 @@ class AssistantActivity : ComponentActivity() {
         }
 
         setContent {
-            Launchpad(closeLaunchpad = { finish() })
+            val mmkv = MMKV.mmkvWithID("mmkv.default", MMKV.MULTI_PROCESS_MODE)
+            val appColors = AppColors(
+                accentColor = parseHexColor(mmkv.decodeString("accentColor")?.removeSurrounding("\""))
+            )
+
+            CompositionLocalProvider(LocalAppColors provides appColors) {
+                Launchpad(closeLaunchpad = { finish() })
+            }
         }
     }
 }
