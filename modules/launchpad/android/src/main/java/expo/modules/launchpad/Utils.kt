@@ -320,3 +320,13 @@ fun parseHexColor(hexColor: String?): Color {
         Color.Black
     }
 }
+
+fun getAppIconFromPackageName(context: Context, packageName: String): Drawable? {
+    return try {
+        val packageManager: PackageManager = context.packageManager
+        val applicationInfo = packageManager.getApplicationInfo(packageName, 0)
+        packageManager.getApplicationIcon(applicationInfo)
+    } catch (e: PackageManager.NameNotFoundException) {
+        null
+    }
+}

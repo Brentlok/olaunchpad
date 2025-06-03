@@ -3,15 +3,27 @@ package expo.modules.launchpad
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.core.net.toUri
 
 data class PlayStoreState(
     val onPlayStorePress: (query: String) -> Unit,
-    val openQueryInPlayStore: (query: String) -> Unit
+    val openQueryInPlayStore: (query: String) -> Unit,
+    val playStoreIcon: ImageBitmap?
 )
 
 @Composable
 fun getPlayStoreState(launchpad: LaunchpadState): PlayStoreState {
+    val playStoreIcon = remember {
+        val iconDrawable = getAppIconFromPackageName(launchpad.context, "com.android.vending")
+
+        if (iconDrawable != null) {
+            drawableToImageBitmap(iconDrawable)
+        } else {
+            null
+        }
+    }
+
     fun openQueryInPlayStore(query: String) {
         val searchQuery = Uri.encode(query)
         val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -43,14 +55,15 @@ fun getPlayStoreState(launchpad: LaunchpadState): PlayStoreState {
 
     return PlayStoreState(
         onPlayStorePress = ::onPlayStorePress,
-        openQueryInPlayStore = ::openQueryInPlayStore
+        openQueryInPlayStore = ::openQueryInPlayStore,
+        playStoreIcon = playStoreIcon
     )
 }
 
 @Composable
 fun PlayStoreView(query: String, playStoreState: PlayStoreState) {
     LaunchpadRowItem(
-        icon = null,
+        icon = playStoreState.playStoreIcon,
         label = "Search in Play Store '$query'",
         subLabel = null,
         onClick = { playStoreState.onPlayStorePress(query) }

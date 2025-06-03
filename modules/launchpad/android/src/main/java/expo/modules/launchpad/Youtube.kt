@@ -4,14 +4,26 @@ import android.app.SearchManager
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.ImageBitmap
 
 data class YoutubeState(
     val onYoutubePress: (query: String) -> Unit,
-    val openQueryInYoutube: (query: String) -> Unit
+    val openQueryInYoutube: (query: String) -> Unit,
+    val youtubeIcon: ImageBitmap?
 )
 
 @Composable
 fun getYoutubeState(launchpad: LaunchpadState): YoutubeState {
+    val youtubeIcon = remember {
+        val iconDrawable = getAppIconFromPackageName(launchpad.context, "com.google.android.youtube") ?: getAppIconFromPackageName(launchpad.context, launchpad.settings.defaultBrowser ?: "")
+
+        if (iconDrawable != null) {
+            drawableToImageBitmap(iconDrawable)
+        } else {
+            null
+        }
+    }
+
     fun openQueryInYoutube(query: String) {
         if (launchpad.settings.youtubeSearchInBrowser) {
             openUrl(launchpad.context, launchpad.settings.defaultBrowser, "https://m.youtube.com/results?search_query=${Uri.encode(query)}")
@@ -38,14 +50,15 @@ fun getYoutubeState(launchpad: LaunchpadState): YoutubeState {
 
     return YoutubeState(
         onYoutubePress = ::onYoutubePress,
-        openQueryInYoutube = ::openQueryInYoutube
+        openQueryInYoutube = ::openQueryInYoutube,
+        youtubeIcon = youtubeIcon
     )
 }
 
 @Composable
 fun YoutubeView(query: String, youtubeState: YoutubeState) {
     LaunchpadRowItem(
-        icon = null,
+        icon = youtubeState.youtubeIcon,
         label = "Search in Youtube '$query'",
         subLabel = null,
         onClick = { youtubeState.onYoutubePress(query) }
