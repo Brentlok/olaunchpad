@@ -22,7 +22,8 @@ export const en_US = {
         styleSetting: {
             isBlurEnabled: 'Blur background',
             changeAccentColor: 'Change color',
-            accentColorConfirm: 'Confirm color',
+            accentColorConfirm: 'Confirm new color',
+            dynamicTextColor: 'Dynamic text color',
         },
         checkPermissions: {
             contacts: {

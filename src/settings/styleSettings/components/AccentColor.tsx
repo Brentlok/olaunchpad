@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Pressable, View } from 'react-native'
 import { ReduceMotion, useSharedValue, withTiming } from 'react-native-reanimated'
-import ColorPicker, { ColorFormatsObject, colorKit, LuminanceCircular, Panel3, Preview } from 'reanimated-color-picker'
-import { Button, Modal, Typography } from '~/components'
+import ColorPicker, { ColorFormatsObject, LuminanceCircular, Panel3, Preview } from 'reanimated-color-picker'
+import { Button, Modal, Switch, Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { useStore } from '~/store'
 import { colors, createStyles } from '~/style'
+import { colorUtils } from '~/utils'
 
 export const AccentColor = () => {
     const T = useTranslations()
     const [isColorPickerOpened, setIsColorPickerOpened] = useState(false)
-    const { setAccentColor, setTextColor } = useStore()
+    const { setAccentColor, setTextColor, dynamicTextColor, setDynamicTextColor } = useStore()
     const initialAccentColor = useSharedValue(colors.accent.get())
     const initialTextColor = useSharedValue(colors.textColor.get())
     const textColor = useSharedValue(colors.textColor.get())
@@ -21,9 +22,11 @@ export const AccentColor = () => {
 
         colors.accent.set(hex)
 
-        const compareColor = textColor.value === colors.black ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 }
-        const contrast = colorKit.runOnUI().contrastRatio(hex, compareColor)
-        const reversedColor = textColor.value === colors.black ? colors.white : colors.black
+        if (!dynamicTextColor) {
+            return
+        }
+
+        const { contrast, reversedColor } = colorUtils.getColorsContrast(hex, textColor.get())
 
         if (contrast < 4.5) {
             textColor.set(reversedColor)
@@ -35,17 +38,41 @@ export const AccentColor = () => {
         setIsColorPickerOpened(false)
         colors.accent.set(withTiming(initialAccentColor.value, { reduceMotion: ReduceMotion.Never }))
         colors.textColor.set(withTiming(initialTextColor.value, { reduceMotion: ReduceMotion.Never }))
-        textColor.set(initialTextColor.value)
         setColor(initialAccentColor.value)
     }
 
     const handleConfirm = () => {
+        const accentColorValue = colors.accent.get()
+        const textColorValue = colors.textColor.get()
+
         setIsColorPickerOpened(false)
-        setColor(colors.accent.get())
-        setAccentColor(colors.accent.get())
-        setTextColor(colors.textColor.get())
-        textColor.set(colors.textColor.get())
+        setColor(accentColorValue)
+        setAccentColor(accentColorValue)
+        setTextColor(textColorValue)
+        textColor.set(textColorValue)
+        initialTextColor.set(textColorValue)
+        initialAccentColor.set(accentColorValue)
     }
+
+    useEffect(() => {
+        if (!dynamicTextColor) {
+            textColor.set(colors.white)
+            colors.textColor.set(withTiming(colors.white, { reduceMotion: ReduceMotion.Never }))
+            setTextColor(colors.white)
+            initialTextColor.set(colors.white)
+
+            return
+        }
+
+        const { contrast, reversedColor } = colorUtils.getColorsContrast(colors.accent.get(), textColor.get())
+
+        if (contrast < 4.5) {
+            setTextColor(reversedColor)
+            textColor.set(reversedColor)
+            colors.textColor.set(withTiming(reversedColor, { reduceMotion: ReduceMotion.Never }))
+            initialTextColor.set(reversedColor)
+        }
+    }, [dynamicTextColor])
 
     return (
         <React.Fragment>
@@ -82,6 +109,15 @@ export const AccentColor = () => {
                             <Panel3 style={styles.colorPicker} />
                         </LuminanceCircular>
                     </ColorPicker>
+                    <View style={styles.switchContainer}>
+                        <Typography>
+                            {T.components.styleSetting.dynamicTextColor}
+                        </Typography>
+                        <Switch
+                            isEnabled={dynamicTextColor}
+                            onChange={setDynamicTextColor}
+                        />
+                    </View>
                     <View>
                         <Button onPress={handleConfirm}>
                             {T.components.styleSetting.accentColorConfirm}
@@ -129,6 +165,12 @@ const styles = createStyles(theme => ({
         marginBottom: theme.gap(2),
     },
     modalContainer: {
+        gap: theme.gap(2),
+    },
+    switchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         gap: theme.gap(2),
     },
 }))

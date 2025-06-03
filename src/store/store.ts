@@ -1,4 +1,3 @@
-import { ColorValue } from 'react-native'
 import { createStore } from 'stan-js'
 import { storage } from 'stan-js/storage'
 import { Launchpad } from '~/modules'
@@ -25,6 +24,7 @@ export const { useStore, getState } = createStore({
     ...styleSettings,
     accentColor: storage('#9B7EBD'),
     textColor: storage('#EEEEEE'),
+    dynamicTextColor: storage(true),
     history: storage<Array<HistoryItem>>([]),
     youtubeSearchInBrowser: storage(false),
     defaultBrowser: storage<string>(Launchpad.getDefaultBrowser()),
