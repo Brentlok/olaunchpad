@@ -1,6 +1,6 @@
-import { Image, Linking } from 'react-native'
+import { Linking } from 'react-native'
 import Animated, { SlideInLeft, SlideOutLeft } from 'react-native-reanimated'
-import { Images } from '~/assets'
+import { Olaunchpad } from '~/assets'
 import { Button, Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { createStyles } from '~/style'
@@ -14,10 +14,7 @@ export const Initial = () => {
             exiting={SlideOutLeft}
             style={styles.container}
         >
-            <Image
-                source={Images.logo}
-                style={styles.logo}
-            />
+            <Olaunchpad />
             <Typography
                 variant="paragraph"
                 center

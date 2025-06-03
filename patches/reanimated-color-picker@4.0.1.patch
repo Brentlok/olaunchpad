@@ -1,20 +1,3 @@
-diff --git a/node_modules/reanimated-color-picker/.bun-tag-27d4e222c90e4092 b/.bun-tag-27d4e222c90e4092
-new file mode 100644
-index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
-diff --git a/lib/src/ColorPicker.tsx b/lib/src/ColorPicker.tsx
-index 092044a60e073917531f7acc2c796f06b32e4195..c3a49c92d321d7ab580cdb0f8c45c4f7caade553 100644
---- a/lib/src/ColorPicker.tsx
-+++ b/lib/src/ColorPicker.tsx
-@@ -92,6 +92,9 @@ const ColorPicker = forwardRef<ColorPickerRef, ColorPickerProps>(
-         get hwba() {
-           return colorKit.runOnUI().HWB(color).string(true);
-         },
-+        get hsvaObj() {
-+          return colorKit.runOnUI().HSV(color).object(false);
-+        }
-       };
-     };
- 
 diff --git a/lib/src/components/Preview.tsx b/lib/src/components/Preview.tsx
 index c6655d1e6bbecee4bfb73fc9cb531595a1a5cc1a..e5e01f9f3121fd9073e52e13ebbad6c5882ba65e 100644
 --- a/lib/src/components/Preview.tsx
@@ -52,18 +35,3 @@ index c6655d1e6bbecee4bfb73fc9cb531595a1a5cc1a..e5e01f9f3121fd9073e52e13ebbad6c5
    }, [hueValue, saturationValue, brightnessValue, alphaValue]);
  
    return (
-diff --git a/lib/typescript/types.d.ts b/lib/typescript/types.d.ts
-index 715d969839c49cfb6a964c5afc01d5fe0feed1e4..df2e870e5384034182b930e8443db99adfe2aeaa 100644
---- a/lib/typescript/types.d.ts
-+++ b/lib/typescript/types.d.ts
-@@ -3,7 +3,9 @@ import type { ImageStyle, StyleProp, TextInputProps, TextStyle, ViewStyle } from
- import type { AnimatedStyleProp, SharedValue } from 'react-native-reanimated';
- import type { SupportedColorFormats } from './colorKit/types';
- import type { Gesture } from 'react-native-gesture-handler/lib/typescript/handlers/gestures/gesture';
--export type ColorFormatsObject = Record<'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba', string>;
-+export type ColorFormatsObject = Record<'hex' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva' | 'hwb' | 'hwba', string> & {
-+    hsvaObj: HSVObject;
-+};
- export type ThumbShapeType = 'ring' | 'solid' | 'hollow' | 'line' | 'plus' | 'pill' | 'triangleUp' | 'triangleDown' | 'doubleTriangle' | 'rect' | 'circle';
- export type HSVObject = {
-     h: number;

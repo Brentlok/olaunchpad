@@ -1,3 +1,1 @@
-export const Images = {
-    logo: require('../../assets/splash.png'),
-}
+export * from './Olaunchpad'

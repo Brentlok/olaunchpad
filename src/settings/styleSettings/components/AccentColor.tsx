@@ -16,13 +16,13 @@ export const AccentColor = () => {
     const textColor = useSharedValue(colors.textColor.get())
     const [color, setColor] = useState(colors.accent.get())
 
-    const onChangeColor = ({ hex, hsvaObj }: ColorFormatsObject) => {
+    const onChangeColor = ({ hex }: ColorFormatsObject) => {
         'worklet'
 
         colors.accent.set(hex)
 
         const compareColor = textColor.value === colors.black ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 }
-        const contrast = colorKit.runOnUI().contrastRatio(hsvaObj, compareColor)
+        const contrast = colorKit.runOnUI().contrastRatio(hex, compareColor)
         const reversedColor = textColor.value === colors.black ? colors.white : colors.black
 
         if (contrast < 4.5) {

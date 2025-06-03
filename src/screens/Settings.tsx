@@ -1,8 +1,8 @@
 import React from 'react'
-import { Image, ScrollView, StatusBar, View } from 'react-native'
+import { ScrollView, StatusBar, View } from 'react-native'
 import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Images } from '~/assets'
+import { Olaunchpad } from '~/assets'
 import { Button, CheckPermissions } from '~/components'
 import { useTranslations } from '~/locale'
 import { Launchpad } from '~/modules'
@@ -25,10 +25,7 @@ export const Settings = () => {
                 },
             ]}
         >
-            <Image
-                source={Images.logo}
-                style={styles.logo}
-            />
+            <Olaunchpad />
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.settingsContainer}
