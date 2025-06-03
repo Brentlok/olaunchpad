@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.draw.clip
 
 @Composable
@@ -48,12 +47,12 @@ fun LaunchpadRowItem(
         }
         Text(
             text = label,
-            color = colorResource(id = R.color.white)
+            color = appColors.textColor
         )
         if (subLabel != null) {
             Text(
                 text = subLabel,
-                color = colorResource(id = R.color.white),
+                color = appColors.textColor,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }

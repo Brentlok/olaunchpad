@@ -6,5 +6,6 @@ export const colors = {
     gray: '#666666',
     dark: '#222831',
     accent: makeMutable(getState().accentColor),
+    textColor: makeMutable(getState().textColor),
     white: '#EEEEEE',
 }

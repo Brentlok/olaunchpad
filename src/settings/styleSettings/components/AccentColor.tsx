@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Pressable, View } from 'react-native'
-import { PressableStateCallbackType } from 'react-native-gesture-handler'
-import { runOnJS } from 'react-native-reanimated'
-import ColorPicker, { ColorFormatsObject, LuminanceCircular, Panel3, Preview } from 'reanimated-color-picker'
+import { ReduceMotion, runOnJS, useSharedValue, withTiming } from 'react-native-reanimated'
+import ColorPicker, { ColorFormatsObject, colorKit, LuminanceCircular, Panel3, Preview } from 'reanimated-color-picker'
 import { Button, Modal, Switch, Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { useStore } from '~/store'
@@ -11,32 +10,44 @@ import { colors, createStyles } from '~/style'
 export const AccentColor = () => {
     const T = useTranslations()
     const [isColorPickerOpened, setIsColorPickerOpened] = useState(false)
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-    const { setAccentColor } = useStore()
+    const { setAccentColor, setTextColor } = useStore()
+    const initialAccentColor = useSharedValue(colors.accent.get())
+    const initialTextColor = useSharedValue(colors.textColor.get())
+    const [color, setColor] = useState(colors.accent.get())
 
-    const updateAccentColorDebounced = (hex: string) => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current)
-        }
-
-        timeoutRef.current = setTimeout(() => {
-            setAccentColor(hex)
-        }, 300)
-    }
-
-    const onChangeColor = ({ hex }: ColorFormatsObject) => {
+    const onChangeColor = ({ hex, hsvaObj }: ColorFormatsObject) => {
         'worklet'
 
         colors.accent.set(hex)
 
-        runOnJS(updateAccentColorDebounced)(hex)
+        const compareColor = colors.textColor.get() === colors.black ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 }
+        const contrast = colorKit.runOnUI().contrastRatio(hsvaObj, compareColor)
+        const reversedColor = colors.textColor.get() === colors.black ? colors.white : colors.black
+
+        if (contrast < 4.5) {
+            colors.textColor.set(reversedColor)
+        }
+    }
+
+    const handleClose = () => {
+        setIsColorPickerOpened(false)
+        colors.accent.set(withTiming(initialAccentColor.value, { reduceMotion: ReduceMotion.Never }))
+        colors.textColor.set(withTiming(initialTextColor.value, { reduceMotion: ReduceMotion.Never }))
+        setColor(initialAccentColor.value)
+    }
+
+    const handleConfirm = () => {
+        setIsColorPickerOpened(false)
+        setColor(colors.accent.get())
+        setAccentColor(colors.accent.get())
+        setTextColor(colors.textColor.get())
     }
 
     return (
         <React.Fragment>
             <View style={styles.settingContainer}>
                 <Typography>
-                    {T.components.styleSetting.accentColor}
+                    {T.components.styleSetting.changeAccentColor}
                 </Typography>
                 <Pressable
                     style={styles.colorPreviewButton}
@@ -44,7 +55,7 @@ export const AccentColor = () => {
                 >
                     <ColorPicker
                         style={styles.colorPreview}
-                        value={colors.accent.get()}
+                        value={color}
                     >
                         <Preview hideInitialColor />
                     </ColorPicker>
@@ -52,25 +63,26 @@ export const AccentColor = () => {
             </View>
             <Modal
                 isVisible={isColorPickerOpened}
-                onClose={() => setIsColorPickerOpened(false)}
+                onClose={handleClose}
             >
-                <ColorPicker
-                    value={colors.accent.get()}
-                    onChange={onChangeColor}
-                >
-                    <Preview style={styles.preview} />
-                    <LuminanceCircular
-                        style={styles.colorPanelCircular}
-                        containerStyle={styles.colorPanelCircularContainer}
+                <View style={styles.modalContainer}>
+                    <ColorPicker
+                        value={color}
+                        onChange={onChangeColor}
                     >
-                        <Panel3 style={styles.colorPicker} />
-                    </LuminanceCircular>
-                </ColorPicker>
-                <View style={styles.previewContainer}>
-                    <Button>
-                        {T.components.styleSetting.accentColorPreview}
-                    </Button>
-                    <Switch isEnabled />
+                        <Preview style={styles.preview} />
+                        <LuminanceCircular
+                            style={styles.colorPanelCircular}
+                            containerStyle={styles.colorPanelCircularContainer}
+                        >
+                            <Panel3 style={styles.colorPicker} />
+                        </LuminanceCircular>
+                    </ColorPicker>
+                    <View>
+                        <Button onPress={handleConfirm}>
+                            {T.components.styleSetting.accentColorConfirm}
+                        </Button>
+                    </View>
                 </View>
             </Modal>
         </React.Fragment>
@@ -111,5 +123,8 @@ const styles = createStyles(theme => ({
     },
     preview: {
         marginBottom: theme.gap(2),
+    },
+    modalContainer: {
+        gap: theme.gap(2),
     },
 }))

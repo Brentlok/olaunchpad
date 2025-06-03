@@ -21,9 +21,8 @@ export const en_US = {
         },
         styleSetting: {
             isBlurEnabled: 'Blur background',
-            accentColor: 'Accent color',
             changeAccentColor: 'Change color',
-            accentColorPreview: 'That\'s how it looks',
+            accentColorConfirm: 'Confirm color',
         },
         checkPermissions: {
             contacts: {

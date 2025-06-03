@@ -61,7 +61,10 @@ export const ExtraBrowser = () => {
                                     source={{ uri: `data:image/png;base64,${icon}` }}
                                     style={styles.icon}
                                 />
-                                <Typography variant="header">
+                                <Typography
+                                    variant="header"
+                                    color="textColor"
+                                >
                                     {item.label}
                                 </Typography>
                             </Animated.View>

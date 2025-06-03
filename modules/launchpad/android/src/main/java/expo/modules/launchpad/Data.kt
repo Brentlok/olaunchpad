@@ -16,9 +16,13 @@ data class Settings(
 
 
 data class AppColors(
-    val accentColor: Color
+    val accentColor: Color,
+    val textColor: Color
 )
 
 val LocalAppColors = compositionLocalOf {
-    AppColors(accentColor = Color.Blue)
+    AppColors(
+        accentColor = Color.Blue,
+        textColor = Color.White
+    )
 }

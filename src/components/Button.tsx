@@ -6,10 +6,12 @@ import { createStyles } from '~/style'
 type ButtonProps = {
     style?: StyleProp<ViewStyle>
     children: string
-    variant?: 'primary' | 'outline'
+    variant?: Variant
     isTiny?: boolean
     onPress?: VoidFunction
 }
+
+type Variant = 'primary' | 'outline'
 
 export const Button: React.FC<ButtonProps> = ({
     variant = 'primary',
@@ -29,9 +31,9 @@ export const Button: React.FC<ButtonProps> = ({
                     styles[variant],
                 ]}
             >
-                <Text style={styles.buttonText(isTiny)}>
+                <Animated.Text style={styles.buttonText(isTiny, variant)}>
                     {children}
-                </Text>
+                </Animated.Text>
             </Animated.View>
         </Pressable>
     )
@@ -47,10 +49,10 @@ const styles = createStyles(theme => ({
         borderRadius: theme.gap(1),
         paddingHorizontal: theme.gap(1),
     },
-    buttonText: (isTiny: boolean) => ({
+    buttonText: (isTiny: boolean, variant: Variant) => ({
         textAlign: 'center',
         fontSize: isTiny ? 12 : 18,
-        color: theme.colors.white,
+        color: variant === 'primary' ? theme.colors.textColor : theme.colors.white,
     }),
     primary: {
         backgroundColor: theme.colors.accent,

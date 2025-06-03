@@ -24,6 +24,7 @@ export const { useStore, getState } = createStore({
     ...searchSettings,
     ...styleSettings,
     accentColor: storage('#9B7EBD'),
+    textColor: storage('#EEEEEE'),
     history: storage<Array<HistoryItem>>([]),
     youtubeSearchInBrowser: storage(false),
     defaultBrowser: storage<string>(Launchpad.getDefaultBrowser()),
