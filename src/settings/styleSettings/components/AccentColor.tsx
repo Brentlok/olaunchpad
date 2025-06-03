@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Pressable, View } from 'react-native'
 import { ReduceMotion, useSharedValue, withTiming } from 'react-native-reanimated'
-import ColorPicker, { ColorFormatsObject, LuminanceCircular, Panel3, Preview } from 'reanimated-color-picker'
+import ColorPicker, { ColorFormatsObject, colorKit, LuminanceCircular, Panel3, Preview } from 'reanimated-color-picker'
 import { Button, Modal, Switch, Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { useStore } from '~/store'
@@ -26,7 +26,7 @@ export const AccentColor = () => {
             return
         }
 
-        const { contrast, reversedColor } = colorUtils.getColorsContrast(hex, textColor.get())
+        const { contrast, reversedColor } = colorUtils.getColorsContrast(hex, textColor.value)
 
         if (contrast < 4.5) {
             textColor.set(reversedColor)
@@ -39,19 +39,17 @@ export const AccentColor = () => {
         colors.accent.set(withTiming(initialAccentColor.value, { reduceMotion: ReduceMotion.Never }))
         colors.textColor.set(withTiming(initialTextColor.value, { reduceMotion: ReduceMotion.Never }))
         setColor(initialAccentColor.value)
+        setTextColor(initialTextColor.value)
     }
 
     const handleConfirm = () => {
-        const accentColorValue = colors.accent.get()
-        const textColorValue = colors.textColor.get()
-
         setIsColorPickerOpened(false)
-        setColor(accentColorValue)
-        setAccentColor(accentColorValue)
-        setTextColor(textColorValue)
-        textColor.set(textColorValue)
-        initialTextColor.set(textColorValue)
-        initialAccentColor.set(accentColorValue)
+        setColor(colors.accent.value)
+        setAccentColor(colors.accent.value)
+        setTextColor(colorKit.HEX(colors.textColor.value))
+        textColor.set(colors.textColor.value)
+        initialTextColor.set(colors.textColor.value)
+        initialAccentColor.set(colors.accent.value)
     }
 
     useEffect(() => {
