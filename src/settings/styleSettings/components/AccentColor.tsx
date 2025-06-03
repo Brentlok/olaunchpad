@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Pressable, View } from 'react-native'
-import { ReduceMotion, runOnJS, useSharedValue, withTiming } from 'react-native-reanimated'
+import { ReduceMotion, useSharedValue, withTiming } from 'react-native-reanimated'
 import ColorPicker, { ColorFormatsObject, colorKit, LuminanceCircular, Panel3, Preview } from 'reanimated-color-picker'
-import { Button, Modal, Switch, Typography } from '~/components'
+import { Button, Modal, Typography } from '~/components'
 import { useTranslations } from '~/locale'
 import { useStore } from '~/store'
 import { colors, createStyles } from '~/style'
@@ -13,6 +13,7 @@ export const AccentColor = () => {
     const { setAccentColor, setTextColor } = useStore()
     const initialAccentColor = useSharedValue(colors.accent.get())
     const initialTextColor = useSharedValue(colors.textColor.get())
+    const textColor = useSharedValue(colors.textColor.get())
     const [color, setColor] = useState(colors.accent.get())
 
     const onChangeColor = ({ hex, hsvaObj }: ColorFormatsObject) => {
@@ -20,12 +21,13 @@ export const AccentColor = () => {
 
         colors.accent.set(hex)
 
-        const compareColor = colors.textColor.get() === colors.black ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 }
+        const compareColor = textColor.value === colors.black ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 }
         const contrast = colorKit.runOnUI().contrastRatio(hsvaObj, compareColor)
-        const reversedColor = colors.textColor.get() === colors.black ? colors.white : colors.black
+        const reversedColor = textColor.value === colors.black ? colors.white : colors.black
 
         if (contrast < 4.5) {
-            colors.textColor.set(reversedColor)
+            textColor.set(reversedColor)
+            colors.textColor.set(withTiming(reversedColor, { reduceMotion: ReduceMotion.Never }))
         }
     }
 
@@ -33,6 +35,7 @@ export const AccentColor = () => {
         setIsColorPickerOpened(false)
         colors.accent.set(withTiming(initialAccentColor.value, { reduceMotion: ReduceMotion.Never }))
         colors.textColor.set(withTiming(initialTextColor.value, { reduceMotion: ReduceMotion.Never }))
+        textColor.set(initialTextColor.value)
         setColor(initialAccentColor.value)
     }
 
@@ -41,6 +44,7 @@ export const AccentColor = () => {
         setColor(colors.accent.get())
         setAccentColor(colors.accent.get())
         setTextColor(colors.textColor.get())
+        textColor.set(colors.textColor.get())
     }
 
     return (

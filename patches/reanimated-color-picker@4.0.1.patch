@@ -1,3 +1,6 @@
+diff --git a/node_modules/reanimated-color-picker/.bun-tag-27d4e222c90e4092 b/.bun-tag-27d4e222c90e4092
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/lib/src/ColorPicker.tsx b/lib/src/ColorPicker.tsx
 index 092044a60e073917531f7acc2c796f06b32e4195..c3a49c92d321d7ab580cdb0f8c45c4f7caade553 100644
 --- a/lib/src/ColorPicker.tsx
@@ -12,6 +15,43 @@ index 092044a60e073917531f7acc2c796f06b32e4195..c3a49c92d321d7ab580cdb0f8c45c4f7
        };
      };
  
+diff --git a/lib/src/components/Preview.tsx b/lib/src/components/Preview.tsx
+index c6655d1e6bbecee4bfb73fc9cb531595a1a5cc1a..e5e01f9f3121fd9073e52e13ebbad6c5882ba65e 100644
+--- a/lib/src/components/Preview.tsx
++++ b/lib/src/components/Preview.tsx
+@@ -1,6 +1,6 @@
+ import React, { useEffect, useState } from 'react';
+ import { ImageBackground, View } from 'react-native';
+-import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from 'react-native-reanimated';
++import Animated, { ReduceMotion, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated';
+ 
+ import colorKit from '../colorKit/index';
+ import usePickerContext from '../AppContext';
+@@ -36,8 +36,9 @@ export function Preview({
+     return contrast < 4.5 ? '#000000' : '#ffffff';
+   }, [alphaValue, value]);
+ 
++  const displayedTextColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
+   const textColor = useSharedValue<'#000000' | '#ffffff'>('#ffffff');
+-  const textColorStyle = useAnimatedStyle(() => ({ color: textColor.value }), [textColor]);
++  const textColorStyle = useAnimatedStyle(() => ({ color: displayedTextColor.value }), [displayedTextColor]);
+ 
+   const previewColor = useSharedValue('#ffffff');
+   const previewColorStyle = useAnimatedStyle(() => ({ backgroundColor: previewColor.value }), [previewColor]);
+@@ -55,7 +56,12 @@ export function Preview({
+     const compareColor2 = textColor.value === '#000000' ? { h: 0, s: 0, v: 0 } : { h: 0, s: 0, v: 100 };
+     const contrast = colorKit.runOnUI().contrastRatio(compareColor1, compareColor2);
+     const reversedColor = textColor.value === '#ffffff' ? '#000000' : '#ffffff';
+-    textColor.value = contrast < 4.5 ? reversedColor : textColor.value;
++
++    if (contrast < 4.5) {
++      textColor.value = reversedColor
++      displayedTextColor.value = withTiming(reversedColor, { reduceMotion: ReduceMotion.Never })
++    }
++
+   }, [hueValue, saturationValue, brightnessValue, alphaValue]);
+ 
+   return (
 diff --git a/lib/typescript/types.d.ts b/lib/typescript/types.d.ts
 index 715d969839c49cfb6a964c5afc01d5fe0feed1e4..df2e870e5384034182b930e8443db99adfe2aeaa 100644
 --- a/lib/typescript/types.d.ts
