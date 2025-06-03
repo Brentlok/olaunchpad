@@ -274,7 +274,23 @@ fun evaluateExpression(expression: String): Double? {
 
     // Convert the expression to postfix and evaluate it
     val postfix = infixToPostfix(expression)
-    return evaluatePostfix(postfix)
+    val result = evaluatePostfix(postfix)
+
+    if (result != null) {
+        val resultString = if (result % 1.0 == 0.0) {
+            result.toInt().toString()
+        } else {
+            result.toString()
+        }
+
+        return if (resultString == expression) {
+            null
+        } else {
+            result
+        }
+    } else {
+        return null
+    }
 }
 
 fun <T> filterAndTake(
