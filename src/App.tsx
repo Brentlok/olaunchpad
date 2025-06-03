@@ -1,5 +1,6 @@
 import { PortalProvider } from '@gorhom/portal'
 import React, { useEffect, useState } from 'react'
+import { SystemBars } from 'react-native-edge-to-edge'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -28,6 +29,7 @@ export const App = () => {
         <SafeAreaProvider>
             <GestureHandlerRootView>
                 <PortalProvider>
+                    <SystemBars style="light" />
                     {isDefaultAssistant ? <Settings /> : <Initial />}
                 </PortalProvider>
             </GestureHandlerRootView>
