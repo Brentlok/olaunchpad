@@ -24,7 +24,7 @@ fun getHistoryState(
     installedAppsState: InstalledAppsState,
     browserState: BrowserState,
     youtubeState: YoutubeState,
-    playStoreState: PlayStoreState
+    playStoreState: PlayStoreState,
 ): HistoryState {
     return HistoryState(
         onHistoryClick = { historyItem ->
@@ -36,6 +36,7 @@ fun getHistoryState(
                 "app" -> installedAppsState.openApp(historyItem.actionValue)
                 "youtube" -> youtubeState.openQueryInYoutube(historyItem.actionValue)
                 "playStore" -> playStoreState.openQueryInPlayStore(historyItem.actionValue)
+                "unitConversion" -> launchpadState.copyToClipboard("Conversion result:", historyItem.actionValue)
             }
         }
     )

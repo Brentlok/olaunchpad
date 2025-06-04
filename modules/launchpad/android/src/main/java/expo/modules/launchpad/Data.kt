@@ -10,6 +10,7 @@ data class Settings(
     val isContactsEnabled: Boolean,
     val isPlayStoreEnabled: Boolean,
     val isCalculatorEnabled: Boolean,
+    val isUnitConversionEnabled: Boolean,
     val youtubeSearchInBrowser: Boolean,
     val defaultBrowser: String?
 )

@@ -8,6 +8,7 @@ export const DEFAULT_SEARCH_SETTINGS = {
     isContactsEnabled: false,
     isPlayStoreEnabled: true,
     isCalculatorEnabled: true,
+    isUnitConversionEnabled: true,
 }
 
 export const DEFAULT_STYLE_SETTINGS = {

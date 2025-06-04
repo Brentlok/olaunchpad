@@ -9,6 +9,7 @@ export const en_US = {
             isContactsEnabled: 'Search in Contacts',
             isPlayStoreEnabled: 'Search in Play Store',
             isCalculatorEnabled: 'Calculator',
+            isUnitConversionEnabled: 'Unit Conversion',
         } satisfies Record<SearchSetting, string>,
         extraSettings: {
             youtube: {

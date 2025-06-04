@@ -108,6 +108,7 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
     val youtubeState = getYoutubeState(launchpadState)
     val playStoreState = getPlayStoreState(launchpadState)
     val calculatorState = getCalculatorState(launchpadState)
+    val unitConversionState = getUnitConversionState(launchpadState)
     val historyState = getHistoryState(
         launchpadState,
         contactsState,
@@ -218,6 +219,9 @@ fun Launchpad(closeLaunchpad: () -> Unit) {
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        if (settings.isUnitConversionEnabled && unitConversionState.conversionDetails != null) {
+                            item { UnitConversionView(unitConversionState) }
+                        }
                         if (settings.isCalculatorEnabled && calculatorState.calculation != null) {
                             item { CalculatorView(searchText.text, calculatorState) }
                         }
