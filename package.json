@@ -14,26 +14,26 @@
   "dependencies": {
     "@gorhom/portal": "1.0.14",
     "@quidone/react-native-wheel-picker": "1.4.1",
-    "expo": "53.0.9",
+    "expo": "53.0.11",
     "react": "19.0.0",
-    "react-native": "0.79.2",
-    "react-native-gesture-handler": "2.25.0",
-    "react-native-mmkv": "3.2.0",
+    "react-native": "0.79.3",
+    "react-native-gesture-handler": "2.26.0",
+    "react-native-mmkv": "3.3.0",
     "react-native-reanimated": "3.18.0",
     "react-native-safe-area-context": "5.4.1",
     "react-native-svg": "15.12.0",
-    "reanimated-color-picker": "4.0.1",
+    "reanimated-color-picker": "4.1.0",
     "stan-js": "1.7.0"
   },
   "devDependencies": {
     "@babel/core": "7.27.4",
-    "@types/react": "19.1.6",
+    "@types/react": "19.1.8",
     "typescript": "5.8.3",
     "dprint": "0.50.0"
   },
   "private": true,
   "patchedDependencies": {
     "@quidone/react-native-wheel-picker@1.4.1": "patches/@quidone%2Freact-native-wheel-picker@1.4.1.patch",
-    "reanimated-color-picker@4.0.1": "patches/reanimated-color-picker@4.0.1.patch"
+    "reanimated-color-picker@4.0.1": "patches/reanimated-color-picker@4.1.0.patch"
   }
 }
